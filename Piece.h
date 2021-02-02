@@ -1,90 +1,166 @@
 #pragma once
 #include <vector>
-enum class Colour { None, White, Black };
-enum class PieceType { None, Pawn, Rook, Bishop, Knight, Queen, King };
-typedef std::pair<char, char> cords;
+#include <tuple>
+enum class Colour {None, White, Black };
+enum class PieceType {None ,Pawn, Rook, Bishop, Knight, Queen, King };
+typedef std::vector<std::tuple<char, char, double>> value_of_moves_with_cords;
 class Piece
 {
-	static const PieceType pieceType = PieceType::None;
-	static const char represent_figure = ' ';
+private:
+	static const PieceType _piecetype = PieceType::None;
+	static const char _represent_figure = ' ';
+	static const int _value = 0;
 public:
-	cords _actual;
-	Colour colour;
-	int move_count = 0;
-	Piece(Colour colour);
-	virtual bool posible_move(Piece * board[8][8], cords& next_space);
-	virtual std::vector<cords> all_posible_moves(Piece* board[8][8]);
-	virtual char getSymbol();
-	virtual PieceType getPieceType();
+	Colour _colour;
+	struct  {
+		char x;
+		char y;
+	}_actual;
+	value_of_moves_with_cords _array_of_moves_with_value;
+	Piece(Colour colour,char y, char x);
+	void move_piece(char y ,char x);
+	virtual int get_value() { return Piece::_value; }
+	virtual double position_score(char y,char x) { return 0; }
+	virtual char getSymbol() { return Piece::_represent_figure; }
+	virtual PieceType getPieceType() { return Piece::_piecetype; }
+	virtual value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]);
 };
-
 class Pawn:public Piece 
 {
-	static const PieceType pieceType = PieceType::Pawn;
-	static const char represent_figure = 'P' ;
+	static const PieceType _piecetype = PieceType::Pawn;
+	static const char _represent_figure = 'P' ;
+	static const int _value = 10;
+	double _scoreBoard[8][8] = {
+	{ 0,  0,  0,  0,  0,  0,  0,  0},
+	{5, 5, 5, 5, 5, 5, 5, 5},
+	{1, 1, 2, 3, 3, 2, 1, 1},
+	{0.5,  0.5, 1, 2.5, 2.5, 1,  0.5, 0.5},
+	{0,  0,  0, 2, 2,  0,  0,  0},
+	{0.5, -0.5,-1,  0,  0,-1, -0.5,  0.5},
+	{0.5, 1, 1,-2,-2, 1, 1, 0.5},
+	{0,  0,  0,  0,  0,  0,  0,  0}
+	};
 public:
-	Pawn(Colour colour);
-	char getSymbol();
-	bool posible_move(Piece* board[8][8], cords& next_space) override;
-	std::vector<cords> all_posible_moves(Piece* board[8][8]) override;
- 	PieceType getPieceType();
+	Pawn(Colour _colour,char y, char x );
+	char getSymbol()override { return Pawn::_represent_figure; }
+	int get_value()override;
+	double position_score(char y,char x) override;
+	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override ;
+	PieceType getPieceType() override { return Pawn::_piecetype; }
 };
-
 class Rook :public Piece 
 {
-	static const PieceType piecetype = PieceType::Rook;
-	static const char represent_figure = 'R';
+	static const PieceType _piecetype = PieceType::Rook;
+	static const char _represent_figure = 'R';
+	static const int _value = 50;
+	double _scoreBoard[8][8] = {
+	{ 0,  0,  0,  0,  0,  0,  0,  0},
+	{0.5, 1, 1, 1, 1, 1, 1, 0.5},
+	{-0.5, 0, 0, 0, 0, 0, 0,-0.5},
+	{-0.5, 0, 0, 0, 0, 0, 0,-0.5},
+	{-0.5, 0, 0, 0, 0, 0, 0,-0.5},
+	{-0.5, 0, 0, 0, 0, 0, 0,-0.5},
+	{-0.5, 0, 0, 0, 0, 0, 0,-0.5},
+	{0, 0, 0, 0.5, 0.5, 0, 0, 0}
+		};
 public:
-	Rook(Colour colour);
-	char getSymbol();
-	bool posible_move(Piece* board[8][8], cords& next_space)override;
-	std::vector<cords> all_posible_moves(Piece* board[8][8]) override;
-	PieceType getPieceType();
+	Rook(Colour colour, char y,char x);
+	char getSymbol()override { return Rook::_represent_figure; }
+	int get_value()override;
+	double position_score(char y, char x) override;
+	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override;
+	PieceType getPieceType() override { return Rook::_piecetype; }
 };
 class Bishop :public Piece
 {
-	static const PieceType piecetype = PieceType::Bishop;
-	static const char represent_figure = 'B';
+	static const PieceType _piecetype = PieceType::Bishop;
+	static const char _represent_figure = 'B';
+	static const int _value = 30;
+	double _scoreBoard[8][8] = {
+	{ -2, -1, -1, -1,  -1, -1, -1, -2},
+	{ -1, -0, 0, 0, 0, 0, 0, -1},
+	{ -1, 0, 0.5, 1, 1, 0.5, 0, -1},
+	{ -1, 0.5, 0.5, 1, 1, 0.5, 0.5,-1},
+	{ -1, 0, 1, 1, 1, 1, 0,-1},
+	{ -1, 1, 1, 1, 1, 1, 1, -1},
+	{ -1, 0.5, 0, 0, 0, 0, 0.5, -1},
+	{ -2, -1, -1, -1,  -1, -1, -1, -2}
+		};
 public:
-	Bishop(Colour colour);
-	char getSymbol();
-	bool posible_move(Piece * board[8][8], cords& next_space)override;
-	std::vector<cords> all_posible_moves(Piece* board[8][8]) override;
-	PieceType getPieceType();
+	Bishop(Colour colour, char y,char x);
+	char getSymbol()override { return Bishop::_represent_figure; }
+	int get_value()override;
+	double position_score(char y, char x) override;
+	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override;
+	PieceType getPieceType() override { return Bishop::_piecetype; }
 };
 class Knight :public Piece
 {
-	static const PieceType piecetype = PieceType::Knight;
-	static const char represent_figure = 'K';
+	static const PieceType _piecetype = PieceType::Knight;
+	static const char _represent_figure = 'K';
+	static const int _value = 30;
+	double _scoreBoard[8][8] = {
+	{ -5, -4, -3, -3,  -3, -3, -4, -5},
+	{-4, -2, 0, 0, 0, 0, -2, -4},
+	{-3, 0, 1, 1.5, 1.5, 1.0, 0, -3},
+	{-0.5, 0.5, 1.5, 2, 2, 1.5, 0.5,-3},
+	{-0.5, 0, 1.5, 2, 2, 1.5, 0,-3},
+	{-3, 0.5, 1, 1.5, 1.5, 1.0, 0.5, -3},
+	{ -4, -2, 0, 0.5, 0.5, 0, -2, -4},
+	{ -5, -4, -3, -3, -3, -3, -4, -5}
+	};
 public:
-	Knight(Colour colour);
-	char getSymbol();
-	bool posible_move(Piece * board[8][8], cords& next_space)override;
-	std::vector<cords> all_posible_moves(Piece* board[8][8]) override;
-	PieceType getPieceType();
+	Knight(Colour colour, char y,char x);
+	char getSymbol()override { return Knight::_represent_figure; }
+	int get_value()override;
+	double position_score(char y, char x) override;
+	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override;
+	PieceType getPieceType() override { return Knight::_piecetype; }
 };
 class Queen :public Piece
 {
-	static const PieceType piecetype = PieceType::Queen;
-	static const char represent_figure = 'Q';
+	static const PieceType _piecetype = PieceType::Queen;
+	static const char _represent_figure = 'Q';
+	static const int _value = 90;
+	double _scoreBoard[8][8] = {
+	{ -2, -1, -1, -0.5, -0.5, -1, -1, -2},
+	{-1, -0, 0, 0, 0, 0, 0, -1},
+	{-1, 0, 0.5, 1.5, 1.0, 0, -3},
+	{-0.5, 0.5, 1.5, 2, 2, 1.5, 0.5,-3},
+	{-0.5, 0, 1.5, 2, 2, 1.5, 0,-3},
+	{-3, 0.5, 1, 1.5, 1.5, 1.0, 0.5, -3},
+	{-1, -0, 0.5, 0, 0, 0, 0, -1},
+	{ -2, -1, -1, -0.5, -0.5, -1, -1, -2}
+	};
 public:
-	Queen(Colour colour);
-	char getSymbol();
-	bool posible_move(Piece * board[8][8], cords& next_space)override;
-	std::vector<cords> all_posible_moves(Piece* board[8][8]) override;
-	PieceType getPieceType();
+	Queen(Colour colour, char y,char x);
+	char getSymbol()override { return Queen::_represent_figure; }
+	int get_value()override;
+	double position_score(char y, char x) override;
+	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override;
+	PieceType getPieceType() override { return Queen::_piecetype; }
 };
 class King :public Piece
 {
-	static const PieceType piecetype = PieceType::King;
-	static const char represent_figure = 'K';
+	static const PieceType _piecetype = PieceType::King;
+	static const char _represent_figure = 'K';
+	static const int _value = 10000;
+	double _scoreBoard[8][8] = {
+	{ -3, -4, -4, -5, -5, -4, -4, -3},
+	{ -3, -4, -4, -5, -5, -4, -4, -3},
+	{ -3, -4, -4, -5, -5, -4, -4, -3},
+	{ -3, -4, -4, -5, -5, -4, -4, -3},
+	{-2, -3, -3, -4, -4, -3, 3,-2},
+	{-1, -2, -2, -2, -2, -2, -2, -1},
+	{2, 2, 0, 0, 0, 0, 2, 2},
+	{ 2, 3, 1, 0, 0, 1, 3, 2}
+	};
+	bool is_there_a_enemy_king(Piece* board[8][8],char y,char x);
 public:
-	King(Colour colour);
-	char getSymbol();
-	bool posible_move(Piece * board[8][8], cords& next_space)override;
-	std::vector<cords> all_posible_moves(Piece* board[8][8]) override;
-	PieceType getPieceType();
+	King(Colour colour, char y,char x);
+	char getSymbol()override { return King::_represent_figure; }
+	int get_value()override;
+	double position_score(char y, char x) override;
+	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override;
+	PieceType getPieceType() override { return King::_piecetype; }
 };
-
-
-
