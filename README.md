@@ -1,1 +1,1 @@
-Console Chess in phase of development
+Chess with AI in phase of development
