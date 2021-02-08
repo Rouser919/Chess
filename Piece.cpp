@@ -46,6 +46,15 @@ value_of_moves_with_cords Pawn::all_posible_moves_with_value(Piece* board[8][8])
 			if (_actual.y == 1 && (board[_actual.y + 2][_actual.x]->getPieceType() == PieceType::None)) {
 				_array_of_moves_with_value.push_back(std::make_tuple(_actual.y + 2, _actual.x, position_score(_actual.y + 2, _actual.x)));
 			}
+			// beating in flight
+			if (_actual.y == 4) { 
+				if (_actual.x + 1 < 8 && board[_actual.y][_actual.x + 1]->getPieceType() == PieceType::Pawn && board[_actual.y][_actual.x + 1]->get_move_count() == 1 && board[_actual.y+1][_actual.x + 1]->getPieceType() == PieceType::None) {
+					_array_of_moves_with_value.push_back(std::make_tuple(_actual.y+1 , _actual.x + 1, position_score(_actual.y+1 , _actual.x + 1) + board[_actual.y+1][_actual.x + 1]->get_value()));
+				}
+				if (_actual.x - 1 >= 0 && board[_actual.y][_actual.x - 1]->getPieceType() == PieceType::Pawn && board[_actual.y][_actual.x - 1]->get_move_count() == 1 && board[_actual.y + 1][_actual.x - 1]->getPieceType() == PieceType::None) {
+					_array_of_moves_with_value.push_back(std::make_tuple(_actual.y+1, _actual.x - 1, position_score(_actual.y+1, _actual.x - 1) + board[_actual.y+1][_actual.x - 1]->get_value()));
+				}
+			}
 			// capture enemy piece left and right 
 			if (_actual.x + 1 < 8 && _actual.x - 1 >= 0) {
 				if (board[_actual.y + 1][_actual.x + 1]->_colour == Colour::Black) {
@@ -68,6 +77,15 @@ value_of_moves_with_cords Pawn::all_posible_moves_with_value(Piece* board[8][8])
 			// moves forward by 2 in start
 			if (_actual.y == 6 && (board[_actual.y - 2][_actual.x]->getPieceType() == PieceType::None)) {
 				_array_of_moves_with_value.push_back(std::make_tuple(_actual.y - 2, _actual.x, position_score(_actual.y - 2, _actual.x)));
+			}
+			// beating in flight
+			if (_actual.y == 3) {
+				if (_actual.x + 1 < 8 && board[_actual.y][_actual.x + 1]->getPieceType() == PieceType::Pawn && board[_actual.y][_actual.x + 1]->get_move_count() == 1 && board[_actual.y - 1][_actual.x + 1]->getPieceType() == PieceType::None) {
+					_array_of_moves_with_value.push_back(std::make_tuple(_actual.y - 1, _actual.x + 1, position_score(_actual.y - 1, _actual.x + 1) + board[_actual.y - 1][_actual.x + 1]->get_value()));
+				}
+				if (_actual.x - 1 >= 0 && board[_actual.y][_actual.x - 1]->getPieceType() == PieceType::Pawn && board[_actual.y][_actual.x - 1]->get_move_count() == 1 && board[_actual.y - 1][_actual.x - 1]->getPieceType() == PieceType::None) {
+					_array_of_moves_with_value.push_back(std::make_tuple(_actual.y - 1, _actual.x - 1, position_score(_actual.y - 1, _actual.x - 1) + board[_actual.y - 1][_actual.x - 1]->get_value()));
+				}
 			}
 			// capture enemy piece left and right 
 			if (_actual.x + 1 < 8 && _actual.x - 1 >= 0) {
