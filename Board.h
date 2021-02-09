@@ -1,6 +1,5 @@
 #pragma once
 #include "Piece.h"
-#include <Windows.h>
 enum class Turn {White,Black};
 class Board
 {
@@ -17,11 +16,16 @@ private:
 	 bool valid_cords_next_move(char y, char x);
 	 void check_for_check_mate();
 	 void update_all_moves();
+	 void print_to_center();
+	 void reset_board();
+	 void get_cords_to_move();
+	 bool move_piece();
+	 void menu_for_chess();
+	 void player_vs_player();
+	 void player_vs_AI();
 public:
+	void print_board();
 	Board();
 	~Board();
-	void reset_board();
-	void get_cords_to_move();
-	bool move_piece();
 }; 
 

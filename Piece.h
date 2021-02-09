@@ -22,7 +22,7 @@ public:
 	Piece(Colour colour,char y, char x);
 	virtual void increase_move_count() { move_count++; }
 	virtual int get_move_count() { return move_count; }
-	void move_piece(char y ,char x);
+	void update_cords_piece(char y ,char x);
 	virtual int get_value() { return Piece::_value; }
 	virtual double position_score(char y,char x) { return 0; }
 	virtual char getSymbol() { return Piece::_represent_figure; }
