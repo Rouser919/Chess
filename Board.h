@@ -4,9 +4,12 @@ enum class Turn {White,Black};
 class Board
 {
 private:
+	typedef std::vector<std::tuple<char, char, char, char,char,char> > typ_logs;
 	 Piece *table_of_chessboard[8][8];
 	 Turn _actual_turn;
 	 cords _actual, _next_move;
+	 typ_logs logs;
+	 std::vector<typ_logs> logs_from_games;
 	 bool can_promote_pawn();
 	 void promote_pawn();
 	 void init_new_table();
@@ -24,6 +27,8 @@ private:
 	 void menu_for_chess();
 	 void player_vs_player();
 	 void player_vs_AI();
+	 void write_logs_from_games(char actual_y, char actual_x, char next_y, char next_x,char symbol,char color);
+	 bool read_logs_from_games();
 public:
 	Board();
 	~Board();

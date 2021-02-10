@@ -23,6 +23,7 @@ public:
 	virtual void increase_move_count() { move_count++; }
 	virtual int get_move_count() { return move_count; }
 	void update_cords_piece(char y ,char x);
+	char get_color_symbol() { if (_colour == Colour::White) return'W'; else if (_colour == Colour::Black) return 'B'; return 'N'; }
 	virtual int get_value() { return Piece::_value; }
 	virtual double position_score(char y,char x) { return 0; }
 	virtual char getSymbol() { return Piece::_represent_figure; }
