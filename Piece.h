@@ -110,7 +110,7 @@ public:
 class Knight :public Piece
 {
 	static const PieceType _piecetype = PieceType::Knight;
-	static const char _represent_figure = 'K';
+	static const char _represent_figure = 'C';
 	static const int _value = 30;
 	int move_count = 0;
 	double _scoreBoard[8][8] = {

@@ -72,6 +72,7 @@ void Board::promote_pawn() {
 	}
 }
 void Board::init_new_table() {
+	
 	table_of_chessboard[0][0] = new Rook(Colour::White, 0, 0);
 	table_of_chessboard[0][1] = new Knight(Colour::White, 0, 1);
 	table_of_chessboard[0][2] = new Bishop(Colour::White, 0, 2);
@@ -88,11 +89,12 @@ void Board::init_new_table() {
 	table_of_chessboard[1][5] = new Pawn(Colour::White, 1, 5);
 	table_of_chessboard[1][6] = new Pawn(Colour::White, 1, 6);
 	table_of_chessboard[1][7] = new Pawn(Colour::White, 1, 7);
-	for (int y = 2; y < 7; y++) {
+	for (int y = 2; y < 6; y++) {
 		for (int x = 0; x < 8; x++) {
 			table_of_chessboard[y][x] = new Piece(Colour::None, y, x);
 		}
 	}
+
 	table_of_chessboard[7][0] = new Rook(Colour::Black, 7, 0);
 	table_of_chessboard[7][1] = new Knight(Colour::Black, 7, 1);
 	table_of_chessboard[7][2] = new Bishop(Colour::Black, 7, 2);
@@ -109,6 +111,7 @@ void Board::init_new_table() {
 	table_of_chessboard[6][5] = new Pawn(Colour::Black, 6, 5);
 	table_of_chessboard[6][6] = new Pawn(Colour::Black, 6, 6);
 	table_of_chessboard[6][7] = new Pawn(Colour::Black, 6, 7);
+	
 }
 bool Board::valid_cords_actual(char y, char x) {
 	if (y < 8 && y >= 0 && x < 8 && x >= 0) {
@@ -141,7 +144,7 @@ void Board::check_for_check_mate() {
 	bool tmp_black=false, tmp_white=false;
 	for (auto& y : table_of_chessboard) {
 		for (auto& x : y) {
-			if (x->_colour == Colour::White) {
+			if (x->_colour == Colour::Black) {
 				for (auto& b : x->_array_of_moves_with_value) {
 					if (std::get<2>(b) > 9500) {
 						tmp_black = true;
@@ -150,7 +153,7 @@ void Board::check_for_check_mate() {
 				}
 
 			}
-			else if (x->_colour == Colour::Black) {
+			else if (x->_colour == Colour::White) {
 				for (auto& b : x->_array_of_moves_with_value) {
 					if (std::get<2>(b) < -9500) {
 						tmp_white = true;
@@ -161,10 +164,41 @@ void Board::check_for_check_mate() {
 			}
 		}
 	}
-	if (tmp_black == true) is_Black_King_in_check_mate = true;
-	else is_Black_King_in_check_mate = false;
-	if (tmp_white == true) is_White_King_in_check_mate = true;
-	else is_White_King_in_check_mate = false;
+	if (tmp_black == true) { std::cout << "White King in CheckMate!" << std::endl; }
+
+	if (tmp_white == true) { std::cout << "Black King in CheckMate!" << std::endl; }
+}
+bool Board::check_for_win_or_draw() {
+	int count_of_figures = 0;
+	bool white_king_alive = false;
+	bool black_king_alive = false;
+	for (auto& b : table_of_chessboard) {
+		for (auto& x : b) {
+			if (x->getPieceType() != PieceType::None) {
+				count_of_figures++;
+				if (x->getPieceType() == PieceType::King && x->_colour == Colour::White) {
+					white_king_alive = true;
+				}
+				else if (x->getPieceType() == PieceType::King && x->_colour == Colour::Black) {
+					black_king_alive=true;
+				}
+			}
+		}
+	}
+	if (!white_king_alive) {
+		std::cout << " Black Pieces Win !" << std::endl;
+		return 1;
+	}
+	else if (!black_king_alive) {
+		std::cout << " White Pieces Win !" << std::endl;
+		return 1;
+	}
+	if (count_of_figures <= 2) {
+		std::cout << " Draw" << std::endl;
+		return 1;
+	}
+	return 0;
+
 }
 void Board::update_all_moves() {
 	for (auto& b : table_of_chessboard) {
@@ -175,6 +209,102 @@ void Board::update_all_moves() {
 		}
 	}
 
+}
+void Board::castling() {
+	bool valid = false;
+	// White castling
+	if ((table_of_chessboard[0][0]->get_move_count() == 0 || table_of_chessboard[0][7]->get_move_count() == 0) && table_of_chessboard[0][4]->get_move_count() == 0) {
+		// left rook
+		if (table_of_chessboard[0][0]->get_move_count() == 0 && table_of_chessboard[0][1]->getPieceType() == PieceType::None &&
+			table_of_chessboard[0][2]->getPieceType() == PieceType::None && table_of_chessboard[0][3]->getPieceType() == PieceType::None) {
+			valid = true;
+			for (auto& b : table_of_chessboard) {
+				for (auto& x : b) {
+					if (x->_colour == Colour::Black) {
+						for (auto& values : x->_array_of_moves_with_value) {
+							char y = std::get<0>(values);
+							char x = std::get<1>(values);
+							if (y == 0 && (x == 1 || x == 2 || x == 3 || x == 4)) valid = false;
+							if (valid == false) break;
+						}
+					}
+				}
+			}
+			if (valid == true) {
+				table_of_chessboard[0][4]->_array_of_moves_with_value.push_back(std::make_tuple(0, 2, 3));
+			}
+
+		}
+		valid = false;
+		//right rook
+		if (table_of_chessboard[0][7]->get_move_count() == 0 && table_of_chessboard[0][6]->getPieceType() == PieceType::None &&
+			table_of_chessboard[0][5]->getPieceType() == PieceType::None) {
+			valid = true;
+			for (auto& b : table_of_chessboard) {
+				for (auto& x : b) {
+					if (x->_colour == Colour::Black) {
+						for (auto& values : x->_array_of_moves_with_value) {
+							char y = std::get<0>(values);
+							char x = std::get<1>(values);
+							if (y == 0 && (x==4 || x==5 || x==6)) valid = false;
+							if (valid == false) break;
+						}
+					}
+				}
+			}
+			if (valid == true) {
+				table_of_chessboard[0][4]->_array_of_moves_with_value.push_back(std::make_tuple(0, 6, 3));
+			}
+
+		}
+		
+	}
+	if ((table_of_chessboard[7][0]->get_move_count() == 0 || table_of_chessboard[7][7]->get_move_count() == 0) && table_of_chessboard[7][4]->get_move_count() == 0) {
+		// left rook
+		if (table_of_chessboard[7][0]->get_move_count() == 0 && table_of_chessboard[7][1]->getPieceType() == PieceType::None &&
+			table_of_chessboard[7][2]->getPieceType() == PieceType::None && table_of_chessboard[7][3]->getPieceType() == PieceType::None) {
+			valid = true;
+			for (auto& b : table_of_chessboard) {
+				for (auto& x : b) {
+					if (x->_colour == Colour::White) {
+						for (auto& values : x->_array_of_moves_with_value) {
+							char y = std::get<0>(values);
+							char x = std::get<1>(values);
+							if (y == 7 && (x == 1 || x == 2 || x == 3 || x == 4)) valid = false;
+							if (valid == false) break;
+						}
+					}
+				}
+			}
+			if (valid == true) {
+				table_of_chessboard[7][4]->_array_of_moves_with_value.push_back(std::make_tuple(7, 1, -3));
+			}
+
+		}
+		valid = false;
+		//right rook
+		if (table_of_chessboard[7][7]->get_move_count() == 0 && table_of_chessboard[7][6]->getPieceType() == PieceType::None &&
+			table_of_chessboard[7][5]->getPieceType() == PieceType::None) {
+			valid = true;
+			for (auto& b : table_of_chessboard) {
+				for (auto& x : b) {
+					if (x->_colour == Colour::White) {
+						for (auto& values : x->_array_of_moves_with_value) {
+							char y = std::get<0>(values);
+							char x = std::get<1>(values);
+							if (y == 7 && (x == 4 || x == 5 || x == 6)) valid = false;
+							if (valid == false) break;
+						}
+					}
+				}
+			}
+			if (valid == true) {
+				table_of_chessboard[7][4]->_array_of_moves_with_value.push_back(std::make_tuple(7, 6,- 3));
+			}
+
+		}
+
+	}
 }
 void Board::print_to_center() { for (int i = 0; i < 40; i++) std::cout << " "; }
 void Board::print_board() {
@@ -249,8 +379,6 @@ void Board::reset_board() {
 	}
 	init_new_table();
 	_actual_turn = Turn::White;
-	is_White_King_in_check_mate = false;
-	is_Black_King_in_check_mate = false;
 }
 void Board::get_cords_to_move() {
 	std::string cords;
@@ -317,6 +445,38 @@ bool Board::move_piece() {
 				table_of_chessboard[_actual.y][_actual.x] = new Piece(Colour::None, _actual.y, _actual.x);
 			}
 		}
+		// castling 
+		else if (table_of_chessboard[_actual.y][_actual.x]->getPieceType() == PieceType::King && table_of_chessboard[_next_move.y][_next_move.x ]->getPieceType() == PieceType::None) {
+			// long castle
+			if (_next_move.x == 6) {
+				// King swap
+				std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y][_next_move.x]);
+				table_of_chessboard[_next_move.y][_next_move.x]->update_cords_piece(_next_move.y, _next_move.x);
+				delete table_of_chessboard[_actual.y][_actual.x];
+				table_of_chessboard[_actual.y][_actual.x] = new Piece(Colour::None, _actual.y, _actual.x);
+				// Rook swap
+				std::swap(table_of_chessboard[_actual.y][7], table_of_chessboard[_next_move.y][5]);
+				table_of_chessboard[_next_move.y][5]->update_cords_piece(_next_move.y, 5);
+				delete table_of_chessboard[_actual.y][7];
+				table_of_chessboard[_actual.y][7] = new Piece(Colour::None, _actual.y, 7);
+			}
+			// short castle
+			else if (_next_move.x == 2) {
+				// King swap
+				std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y][_next_move.x]);
+				table_of_chessboard[_next_move.y][_next_move.x]->update_cords_piece(_next_move.y, _next_move.x);
+				delete table_of_chessboard[_actual.y][_actual.x];
+				table_of_chessboard[_actual.y][_actual.x] = new Piece(Colour::None, _actual.y, _actual.x);
+				// Rook swap
+				std::swap(table_of_chessboard[_actual.y][0], table_of_chessboard[_next_move.y][3]);
+				table_of_chessboard[_next_move.y][3]->update_cords_piece(_next_move.y, 3);
+				delete table_of_chessboard[_actual.y][0];
+				table_of_chessboard[_actual.y][0] = new Piece(Colour::None, _actual.y, 0);
+
+			}
+
+		}
+
 		// others 
 		else  {
 			std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y][_next_move.x]);
@@ -329,7 +489,6 @@ bool Board::move_piece() {
 			_actual_turn = Turn::Black;
 		}
 		else _actual_turn = Turn::White;
-		check_for_check_mate();
 		return true;
 	}
 	else { std::cout << "Wrong move, type again" << std::endl; }
@@ -338,24 +497,29 @@ bool Board::move_piece() {
 void Board::menu_for_chess() {
 	std::cout << " Welcome to my chess program!" << std::endl;
 	std::cout << " Type option which you want" << std::endl;
-	std::cout << "1.New game" << std::endl << "2.How to play" << std::endl << "3.Type X to exit" << std::endl;
-	int option;
+	std::cout << "1.New game" << std::endl << "2.How to play" << std::endl << "Type X to exit" << std::endl;
+	char option;
 	std::cin >> option;
 	while (option != 'X') {
 		switch (option) {
-		case 1:
+		case '1':
 			std::cout << " Type option which you want" << std::endl << "1. Player vs Player" << std::endl << "2. Player vs AI" << std::endl;
 			std::cin >> option;
-			if (option == 1) {
+			if (option == '1') {
 				player_vs_player();
 
 			}
-			else if (option == 2) {
-
+			else if (option == '2') {
+				player_vs_AI();
 			}
 			else { std::cout << "Wrong number, type again!"<<std::endl; }
 			break;
-		case 2:
+		case '2' :
+			std::cout << std::endl << "1. First write letter of a cords then number" << std::endl <<
+				"2.Default white pieces start" << std::endl << "3. Names of figure with shortcut:" << std::endl <<
+				"P-Pawn" << std::endl << "R-Rook" << std::endl << "C-Knight" << std::endl << "B-Bishop" << "Q-Queen" << std::endl << "K-King" << std::endl <<
+				" Back to menu in 10 s" << std::endl;
+			Sleep(10000);
 			break;
 		default:
 			std::cout << " Wrong number, type again!" << std::endl;
@@ -379,20 +543,23 @@ void Board::player_vs_player() {
 		else std::cout << "Black Turn";
 		std::cout << std::endl;
 		update_all_moves();
+		castling();
+		check_for_check_mate();
 		get_cords_to_move();
 		move_piece();
+		if (check_for_win_or_draw()) win_check = true;
 	}
 
 }
+void Board::player_vs_AI() {
 
+}
 Board::Board() {
 	init_new_table();
 	_actual_turn = Turn::White;
-	is_White_King_in_check_mate = false;
-	is_Black_King_in_check_mate = false;
-	//menu_for_chess(); for faster testing
-	player_vs_player();
+	menu_for_chess(); 
 }
+
 Board::~Board() {
 	for (auto& i : table_of_chessboard) {
 		for (auto& b : i) {
