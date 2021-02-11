@@ -21,6 +21,7 @@ public:
 	value_of_moves_with_cords _array_of_moves_with_value;
 	Piece(Colour colour,char y, char x);
 	virtual void increase_move_count() { move_count++; }
+	virtual void decrease_move_count_for_undo_move() { move_count -= 2; }
 	virtual int get_move_count() { return move_count; }
 	void update_cords_piece(char y ,char x);
 	char get_color_symbol() { if (_colour == Colour::White) return'W'; else if (_colour == Colour::Black) return 'B'; return 'N'; }
@@ -49,6 +50,7 @@ class Pawn:public Piece
 public:
 	Pawn(Colour _colour,char y, char x );
 	void increase_move_count() override { move_count++; }
+	void decrease_move_count_for_undo_move() override { move_count -= 2; }
 	int get_move_count()override { return move_count; }
 	char getSymbol()override { return Pawn::_represent_figure; }
 	int get_value()override;
@@ -75,6 +77,7 @@ class Rook :public Piece
 public:
 	Rook(Colour colour, char y,char x);
 	void increase_move_count() override { move_count++; }
+	void decrease_move_count_for_undo_move() override { move_count -= 2; }
 	int get_move_count()override { return move_count; }
 	char getSymbol()override { return Rook::_represent_figure; }
 	int get_value()override;
@@ -101,6 +104,7 @@ class Bishop :public Piece
 public:
 	Bishop(Colour colour, char y,char x);
 	void increase_move_count() override { move_count++; }
+	void decrease_move_count_for_undo_move() override { move_count -= 2; }
 	int get_move_count()override { return move_count; }
 	char getSymbol()override { return Bishop::_represent_figure; }
 	int get_value()override;
@@ -127,6 +131,7 @@ class Knight :public Piece
 public:
 	Knight(Colour colour, char y,char x);
 	void increase_move_count() override { move_count++; }
+	void decrease_move_count_for_undo_move() override { move_count -= 2; }
 	int get_move_count()override { return move_count; }
 	char getSymbol()override { return Knight::_represent_figure; }
 	int get_value()override;
@@ -153,6 +158,7 @@ class Queen :public Piece
 public:
 	Queen(Colour colour, char y,char x);
 	void increase_move_count() override { move_count++; }
+	void decrease_move_count_for_undo_move() override { move_count -= 2; }
 	int get_move_count()override { return move_count; }
 	char getSymbol()override { return Queen::_represent_figure; }
 	int get_value()override;
@@ -180,6 +186,7 @@ class King :public Piece
 public:
 	King(Colour colour, char y,char x);
 	void increase_move_count() override { move_count++; }
+	void decrease_move_count_for_undo_move() override { move_count -= 2; }
 	int get_move_count()override { return move_count; }
 	char getSymbol()override { return King::_represent_figure; }
 	int get_value()override;

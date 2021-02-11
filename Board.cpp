@@ -408,10 +408,10 @@ void Board::get_cords_to_move() {
 			if (valid_cords_next_move(cords[1] - 49, cords[0] - 48)) {
 				tmp = false;
 				_next_move.y = cords[1] - 49;
-				_next_move.x = cords[0] - 48;
+_next_move.x = cords[0] - 48;
 			}
 		}
-		if (tmp == true )std::cout << "Invalid cords, type again" << std::endl;
+		if (tmp == true)std::cout << "Invalid cords, type again" << std::endl;
 		cords.clear();
 	}
 }
@@ -424,30 +424,30 @@ bool Board::move_piece() {
 		}
 		if (valid == true) break;
 	}
-	
+
 	if (valid == true) {
 		// beating in flight for Pawn
 		if (table_of_chessboard[_actual.y][_actual.x]->getPieceType() == PieceType::Pawn &&
-			table_of_chessboard[_next_move.y][_next_move.x]->getPieceType() == PieceType::None && _actual.x!=_next_move.x) {
+			table_of_chessboard[_next_move.y][_next_move.x]->getPieceType() == PieceType::None && _actual.x != _next_move.x) {
 			if (table_of_chessboard[_next_move.y - 1][_next_move.x]->getPieceType() == PieceType::Pawn &&
 				table_of_chessboard[_actual.y][_actual.x]->_colour != table_of_chessboard[_next_move.y - 1][_next_move.x]->_colour) {
-				write_logs_from_games(_actual.y,_actual.x,_next_move.y,_next_move.x, table_of_chessboard[_actual.y][_actual.x]->getSymbol(), table_of_chessboard[_actual.y][_actual.x]->get_color_symbol());
-				std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y-1][_next_move.x]);
+				write_logs_from_games(_actual.y, _actual.x, _next_move.y, _next_move.x, table_of_chessboard[_actual.y][_actual.x]->getSymbol(), table_of_chessboard[_actual.y][_actual.x]->get_color_symbol());
+				std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y - 1][_next_move.x]);
 				table_of_chessboard[_next_move.y][_next_move.x]->update_cords_piece(_next_move.y, _next_move.x);
 				delete table_of_chessboard[_actual.y][_actual.x];
 				table_of_chessboard[_actual.y][_actual.x] = new Piece(Colour::None, _actual.y, _actual.x);
 			}
-			else if(table_of_chessboard[_next_move.y + 1][_next_move.x]->getPieceType() == PieceType::Pawn &&
-				table_of_chessboard[_actual.y][_actual.x]->_colour != table_of_chessboard[_next_move.y + 1][_next_move.x]->_colour){
+			else if (table_of_chessboard[_next_move.y + 1][_next_move.x]->getPieceType() == PieceType::Pawn &&
+				table_of_chessboard[_actual.y][_actual.x]->_colour != table_of_chessboard[_next_move.y + 1][_next_move.x]->_colour) {
 				write_logs_from_games(_actual.y, _actual.x, _next_move.y, _next_move.x, table_of_chessboard[_actual.y][_actual.x]->getSymbol(), table_of_chessboard[_actual.y][_actual.x]->get_color_symbol());
 				std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y + 1][_next_move.x]);
-				table_of_chessboard[_next_move.y][_next_move.x]->update_cords_piece(_next_move.y , _next_move.x);
+				table_of_chessboard[_next_move.y][_next_move.x]->update_cords_piece(_next_move.y, _next_move.x);
 				delete table_of_chessboard[_actual.y][_actual.x];
 				table_of_chessboard[_actual.y][_actual.x] = new Piece(Colour::None, _actual.y, _actual.x);
 			}
 		}
 		// castling 
-		else if (table_of_chessboard[_actual.y][_actual.x]->getPieceType() == PieceType::King && table_of_chessboard[_next_move.y][_next_move.x ]->getPieceType() == PieceType::None) {
+		else if (table_of_chessboard[_actual.y][_actual.x]->getPieceType() == PieceType::King && table_of_chessboard[_next_move.y][_next_move.x]->getPieceType() == PieceType::None) {
 			// long castle
 			if (_next_move.x == 6) {
 				// King swap
@@ -483,7 +483,7 @@ bool Board::move_piece() {
 		}
 
 		// others 
-		else  {
+		else {
 			write_logs_from_games(_actual.y, _actual.x, _next_move.y, _next_move.x, table_of_chessboard[_actual.y][_actual.x]->getSymbol(), table_of_chessboard[_actual.y][_actual.x]->get_color_symbol());
 			std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y][_next_move.x]);
 			table_of_chessboard[_next_move.y][_next_move.x]->update_cords_piece(_next_move.y, _next_move.x);
@@ -500,9 +500,64 @@ bool Board::move_piece() {
 	else { std::cout << "Wrong move, type again" << std::endl; }
 	return false;
 }
+void Board::undo_move() {
+	// check for castling
+	// 0- prev y, 1- prev x, 2 actual y,3 actual x, 4 symbol,5 color
+	int king = _logs.size() - 2;
+	int rook = _logs.size() - 1;
+	if ((std::get<4>(_logs[king]) == 'K') && ((std::get<2>(_logs[king]) == 7) || (std::get<2>(_logs[king]) == 0))) {
+		// castling
+		if (std::get<5>(_logs[rook]) == std::get<5>(_logs[king]) && std::get<2>(_logs[rook])== std::get<2>(_logs[king])) {
+			if (table_of_chessboard[std::get<2>(_logs[rook])][std::get<3>(_logs[rook])]->get_move_count() == 1 &&
+				table_of_chessboard[std::get<2>(_logs[king])][std::get<3>(_logs[king])]->get_move_count() == 1) {
+				// pass color test and move test
+				//long castle
+				if (std::get<3>(_logs[rook]) == 3 && std::get<3>(_logs[king]) == 2){
+					// King swap
+					std::swap(table_of_chessboard[std::get<0>(_logs[king])][4], table_of_chessboard[std::get<2>(_logs[king])][2]);
+					table_of_chessboard[std::get<2>(_logs[king])][4]->update_cords_piece(std::get<2>(_logs[king]),4);
+					table_of_chessboard[std::get<2>(_logs[king])][4]->decrease_move_count_for_undo_move();
+					delete table_of_chessboard[std::get<2>(_logs[king])][2];
+					table_of_chessboard[std::get<2>(_logs[king])][2] = new Piece(Colour::None, std::get<2>(_logs[king]), 2);
+					// Rook swap
+					std::swap(table_of_chessboard[std::get<2>(_logs[rook])][3], table_of_chessboard[std::get<2>(_logs[rook])][0]);
+					table_of_chessboard[std::get<2>(_logs[rook])][0]->update_cords_piece(std::get<2>(_logs[rook]), 0);
+					table_of_chessboard[std::get<2>(_logs[rook])][0]->decrease_move_count_for_undo_move();
+					delete table_of_chessboard[std::get<2>(_logs[rook])][3];
+					table_of_chessboard[std::get<2>(_logs[rook])][3] = new Piece(Colour::None, std::get<2>(_logs[rook]), 3);
+					_logs.erase(_logs.begin()+king, _logs.end());
+				}
+				else if (std::get<3>(_logs[rook]) == 5 && std::get<3>(_logs[king]) == 6) {
+					// King swap
+					std::swap(table_of_chessboard[std::get<0>(_logs[king])][4], table_of_chessboard[std::get<2>(_logs[king])][6]);
+					table_of_chessboard[std::get<2>(_logs[king])][4]->update_cords_piece(std::get<2>(_logs[king]), 4);
+					table_of_chessboard[std::get<2>(_logs[king])][4]->decrease_move_count_for_undo_move();
+					delete table_of_chessboard[std::get<2>(_logs[king])][6];
+					table_of_chessboard[std::get<2>(_logs[king])][6] = new Piece(Colour::None, std::get<2>(_logs[king]), 6);
+					// Rook swap
+					std::swap(table_of_chessboard[std::get<2>(_logs[rook])][5], table_of_chessboard[std::get<2>(_logs[rook])][7]);
+					table_of_chessboard[std::get<2>(_logs[rook])][7]->update_cords_piece(std::get<2>(_logs[rook]), 0);
+					table_of_chessboard[std::get<2>(_logs[rook])][7]->decrease_move_count_for_undo_move();
+					delete table_of_chessboard[std::get<2>(_logs[rook])][5];
+					table_of_chessboard[std::get<2>(_logs[rook])][5] = new Piece(Colour::None, std::get<2>(_logs[rook]), 5);
+					_logs.erase(_logs.begin() + king, _logs.end());
+
+				}
+
+			}
+
+		}
+		
+	}
+	// beating in flight by Pawn
+	else if (std::get<6>(_logs[_logs.size() - 1]) == 'L' || std::get<6>(_logs[_logs.size() - 1]) == 'R') {
+
+	}
+}
+
 void Board::menu_for_chess() {
 	std::cout << "Welcome to Chess program by Mateusz Stopa" << std::endl <<"-------------------------------------------------------------------"<< std::endl;
-	std::cout << "1.New game" << std::endl << "2.How to play" <<std::endl<< "3.Read logs from games"<< std::endl << "Type X to exit" << std::endl;
+	std::cout << "1.New game" << std::endl << "2.How to play" <<std::endl<< "3.Read _logs from games"<< std::endl << "Type X to exit" << std::endl;
 	char option;
 	std::cin >> option;
 	while (option != 'X') {
@@ -534,7 +589,7 @@ void Board::menu_for_chess() {
 			break;
 
 		}
-		std::cout << "1.New game" << std::endl << "2.How to play" << std::endl << "3.Read logs from games" << std::endl << "Type X to exit" << std::endl;
+		std::cout << "1.New game" << std::endl << "2.How to play" << std::endl << "3.Read _logs from games" << std::endl << "Type X to exit" << std::endl;
 		std::cin >> option;
 	}
 
@@ -542,7 +597,8 @@ void Board::menu_for_chess() {
 }
 void Board::player_vs_player() {
 	bool win_check = false;
-	logs.clear();
+	bool good_data = false;
+	_logs.clear();
 	while (win_check == false) {
 		print_board();
 		if (_actual_turn == Turn::White) {
@@ -554,33 +610,38 @@ void Board::player_vs_player() {
 		castling();
 		check_for_check_mate();
 		get_cords_to_move();
-		move_piece();
+		if (!move_piece()) {
+			do {
+				get_cords_to_move();
+			} while (!move_piece());
+		}
+
 		if (check_for_win_or_draw()) win_check = true;
 	}
-	logs_from_games.push_back(logs);
+	_logs_from_games.push_back(_logs);
 
 }
 void Board::player_vs_AI() {
 
 }
 
-void Board::write_logs_from_games(char actual_y, char actual_x, char next_y, char next_x,char symbol,char color) {
-	logs.push_back(std::make_tuple(actual_y, actual_x, next_y, next_x,symbol,color));
+void Board::write_logs_from_games(char actual_y, char actual_x, char next_y, char next_x,char symbol,char color,char beating ='x') {
+	_logs.push_back(std::make_tuple(actual_y, actual_x, next_y, next_x,symbol,color,beating));
 }
 bool Board::read_logs_from_games() {
-	std::cout << logs_from_games.size() << " games are available to seen" << std::endl;
-	if (logs_from_games.size() == 0) { std::cout << " Return to main menu" << std::endl; return 0; }
+	std::cout << _logs_from_games.size() << " games are available to seen" << std::endl;
+	if (_logs_from_games.size() == 0) { std::cout << " Return to main menu" << std::endl; return 0; }
 	std::cout << "Choose one" << std::endl;
 	int i;
 	std::cin >> i;
-	while(i> logs_from_games.size() || i<1){
+	while(i> _logs_from_games.size() || i<1){
 		std::cout << "Wrong number, type again!" << std::endl;
-		std::cout << logs_from_games.size() << " games are available to seen" << std::endl;
+		std::cout << _logs_from_games.size() << " games are available to seen" << std::endl;
 		std::cout << "Choose one" << std::endl;
 		std::cin >> i;
 	}
 	std::cout << std::endl << "------------------" << std::endl << "Game " << i << ":" << std::endl;
-	for (auto& x : logs_from_games[i - 1]) {
+	for (auto& x : _logs_from_games[i - 1]) {
 		int counter_of_rows = 1;
 		std::cout << counter_of_rows << ". From " << std::get<0>(x) << std::get<1>(x) << " To" << std::get<2>(x) << std::get<3>(x) << ".";
 		if (std::get<4>(x) == 'W') {
@@ -618,6 +679,116 @@ bool Board::read_logs_from_games() {
 	return 1;
 
 }
+/*int Board::quiescenceSearch(char depth, int alpha, int beta) {
+	int value = 0;
+	if (depth == _depth_search ) return value;
+	else {
+		MoveData move;
+		if (colour == Colour::White) {
+			if (value >= beta) return value;
+			if (alpha < value) alpha = value;
+			for (char x = 0; x <= 7; x++) {
+				for (char y = 0; y <= 7; y++) {
+					if ((board->squares[x][y] != nullptr) && (board->squares[x][y]->colour == colour)) {
+						std::vector<std::tuple<char, char>> moveList;
+						moveList = board->squares[x][y]->getCaptureMoveList(board->squares, x, y); //Only capture-moves are investigated
+						for (unsigned int i = 0; i < moveList.size(); i++) {
+							Engine::quiescenceNodes++;
+							move = board->moveTo(std::tuple<char, char>(x, y), moveList[i]);
+							if (move.validMove) {
+								if ((move.pieceTaken != nullptr) && (move.pieceTaken->getPieceType() == PieceType::King)) {
+									board->undoMove(move);
+									return Engine::BLACK_MAX;
+								}
+								value = Engine::quiescenceSearch(board, Colour::Black, depth + 1, alpha, beta);
+								board->undoMove(move);
+								if (value >= beta) return value;
+								if (alpha < value) alpha = value;
+							}
+						}
+					}
+				}
+			}
+			return value;
+		}
+		else {
+			if (value <= alpha) return value;
+			if (value < beta) beta = value;
+			for (char x = 0; x <= 7; x++) {
+				for (char y = 0; y <= 7; y++) {
+					if ((board->squares[x][y] != nullptr) && (board->squares[x][y]->colour == colour)) {
+						std::vector<std::tuple<char, char>> moveList;
+						moveList = board->squares[x][y]->getCaptureMoveList(board->squares, x, y);
+						for (unsigned int i = 0; i < moveList.size(); i++) {
+							Engine::quiescenceNodes++;
+							move = board->moveTo(std::tuple<char, char>(x, y), moveList[i]);
+							if (move.validMove) {
+								if ((move.pieceTaken != nullptr) && (move.pieceTaken->getPieceType() == PieceType::King)) {
+									board->undoMove(move);
+									return Engine::WHITE_MIN;
+								}
+								value = Engine::quiescenceSearch(board, Colour::White, depth + 1, alpha, beta);
+								board->undoMove(move);
+								if (value <= alpha) return value;
+								if (value < beta) beta = value;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return value;
+}
+
+int Board::value_of_table() {
+	int value = 0;
+	for (int y = 0; y < 8; y++) {
+		for (int x = 0; x < 8; x++) {
+			value += table_of_chessboard[y][x]->get_value() + table_of_chessboard[y][x]->position_score(y,x);
+		}
+	}
+
+	return value;
+}
+*/
+int Board::breadth_search(char depth) {
+	double value = 0;
+	double max = 0;
+	if (depth > 0) {
+		if (Turn::White == _actual_turn) {
+			for (auto& b : table_of_chessboard) {
+				for (auto& x : b) {
+					if (x->_colour == Colour::White) {
+						for (auto& values : x->_array_of_moves_with_value) {
+							// move data
+							value = std::get<2>(values)+ breadth_search(depth - 1);
+							if (value < max) {
+								max = value;
+							}
+							//unmove data
+							// much to doooooooo
+
+						}
+
+					}
+
+
+				}
+			}
+
+		}
+		else {
+
+		}
+
+
+
+		return max;
+	}
+	else return 0;
+}
+
 Board::Board() {
 	init_new_table();
 	_actual_turn = Turn::White;
