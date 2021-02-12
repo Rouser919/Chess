@@ -5,8 +5,6 @@ class Board
 {
 private:
 	 typedef std::vector<std::tuple<char, char, char, char,char,char,char> > typ_logs;
-	 typedef std::tuple<char, char, char, char>  move;
-	 move moves_from_search;
 	 Piece *table_of_chessboard[8][8];
 	 Turn _actual_turn;
 	 cords _actual, _next_move;
@@ -32,9 +30,10 @@ private:
 	 void undo_move();
 	 void menu_for_chess();
 	 void player_vs_player();
-	 void player_vs_AI();
+	 void player_vs_AI(int type);
 	 void write_logs_from_games(char actual_y, char actual_x, char next_y, char next_x,char symbol,char color,char beating='x');
 	 bool read_logs_from_games();
+	 void begin_of_breadth_search();
 	 int breadth_search(char depth);
 	 int quiescenceSearch(char depth, int alpha, int beta);
 	 int value_of_table();

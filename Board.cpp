@@ -660,7 +660,9 @@ void Board::menu_for_chess() {
 
 			}
 			else if (option == '2') {
-				player_vs_AI();
+				std::cout << "Type 1 for play as white, type 2 for play as black" << std::endl;
+				std::cin >> option;
+				if (option==1 || option ==2)player_vs_AI(option);
 			}
 			else { std::cout << "Wrong number, type again!"<<std::endl; }
 			break;
@@ -712,7 +714,72 @@ void Board::player_vs_player() {
 
 }
 // Need good handle it
-void Board::player_vs_AI() {
+void Board::player_vs_AI(int type) {
+	bool win_check = false;
+	bool good_data = false;
+	_logs.clear();
+	if (type == 1) {
+		while (win_check == false) {
+			print_board();
+			std::cout << "Your turn";
+			std::cout << std::endl;
+			update_all_moves();
+			castling();
+			check_for_check_mate();
+			get_cords_to_move();
+			if (!move_piece()) {
+				do {
+					get_cords_to_move();
+				} while (!move_piece());
+			}
+			if (check_for_win_or_draw()) {
+				win_check = true;
+				continue;
+			}
+			print_board();
+			std::cout << "Computer Turn" << std::endl;
+			begin_of_breadth_search();
+			move_piece();
+			check_for_check_mate();
+			if (check_for_win_or_draw()) win_check = true;
+		}
+
+	}
+	else {
+		while (win_check == false) {
+			std::cout << "Computer Turn" << std::endl;
+			print_board();
+			update_all_moves();
+			castling();
+			begin_of_breadth_search();
+			move_piece();
+			check_for_check_mate();
+			if (check_for_win_or_draw()) {
+				win_check = true;
+				continue;
+			}
+			print_board();
+			std::cout << "Your turn";
+			std::cout << std::endl;
+			update_all_moves();
+			castling();
+			get_cords_to_move();
+			if (!move_piece()) {
+				do {
+					get_cords_to_move();
+				} while (!move_piece());
+			}
+			check_for_check_mate();
+			if (check_for_win_or_draw()) {
+				win_check = true;
+			}
+
+		}
+
+
+	}
+
+	_logs_from_games.push_back(_logs);
 
 }
 void Board::write_logs_from_games(char actual_y, char actual_x, char next_y, char next_x,char symbol,char color,char beating ='x') {
@@ -770,8 +837,61 @@ bool Board::read_logs_from_games() {
 
 }
 // There must be another base function for breadth_search to do best move for AI
+void Board::begin_of_breadth_search() {
+	std::tuple<char, char, char, char> move;
+	int value = 0, tmp_value = 0;
+	cords actual;
+	if (Turn::White==_actual_turn) {
+		for (auto& b : table_of_chessboard) {
+			for (auto& x : b) {
+				actual.x = x->_actual.x;
+				actual.y = x->_actual.y;
+				change_actual_move(actual.y, actual.x);
+				if (x->_colour == Colour::White) {
+					for (auto& values : x->_array_of_moves_with_value) {
+						change_next_move(std::get<0>(values), std::get<1>(values));
+						move_piece();
+						tmp_value = breadth_search(_depth_search - 1);
+						if (tmp_value < value) {
+							tmp_value = value;
+							move = std::make_tuple(actual.y, actual.x, std::get<0>(values), std::get<1>(values));
+						}
+						undo_move();
+
+					}
+				}
+			}
+		}
+
+	}
+	else {
+		for (auto& b : table_of_chessboard) {
+			for (auto& x : b) {
+				actual.x = x->_actual.x;
+				actual.y = x->_actual.y;
+				change_actual_move(actual.y, actual.x);
+				if (x->_colour == Colour::Black) {
+					for (auto& values : x->_array_of_moves_with_value) {
+						change_next_move(std::get<0>(values), std::get<1>(values));
+						move_piece();
+						tmp_value = breadth_search(_depth_search - 1);
+						if (tmp_value > value) {
+							tmp_value = value;
+							move = std::make_tuple(actual.y, actual.x, std::get<0>(values), std::get<1>(values));
+						}
+						undo_move();
+
+					}
+				}
+			}
+		}
+	}
+	change_actual_move(std::get<0>(move), std::get<1>(move));
+	change_next_move(std::get<2>(move), std::get<3>(move));
+}
 int Board::breadth_search(char depth) {
 	update_all_moves();
+	castling();
 	double value = 0;
 	double max = 0;
 	cords actual;
@@ -782,7 +902,7 @@ int Board::breadth_search(char depth) {
 					if (x->_colour == Colour::White) {
 						actual.x = x->_actual.x;
 						actual.y = x->_actual.y;
-						change_actual_move(_actual.y, _actual.x);
+						change_actual_move(actual.y, actual.x);
 						for (auto& values : x->_array_of_moves_with_value) {
 							change_next_move(std::get<0>(values), std::get<1>(values));
 							move_piece();
@@ -792,7 +912,6 @@ int Board::breadth_search(char depth) {
 							}
 							undo_move();
 						}
-						change_actual_move(actual.y, actual.x);
 					}
 				}
 			}
@@ -803,7 +922,7 @@ int Board::breadth_search(char depth) {
 					if (x->_colour == Colour::Black) {
 						actual.x = x->_actual.x;
 						actual.y = x->_actual.y;
-						change_actual_move(_actual.y, _actual.x);
+						change_actual_move(actual.y, actual.x);
 						for (auto& values : x->_array_of_moves_with_value) {
 							change_next_move(std::get<0>(values), std::get<1>(values));
 							move_piece();
@@ -813,7 +932,7 @@ int Board::breadth_search(char depth) {
 							}
 							undo_move();
 						}
-						change_actual_move(actual.y, actual.x);
+
 
 					}
 				}
