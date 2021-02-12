@@ -10,7 +10,7 @@ private:
 	 cords _actual, _next_move;
 	 typ_logs _logs;
 	 std::vector<typ_logs> _logs_from_games;
-	 const int _depth_search = 3;
+	 const int _depth_search = 2;
 	 void change_next_move(char y, char x) { _next_move.y = y, _next_move.x = x; }
 	 void change_actual_move(char y, char x) { _actual.y = y, _actual.x = x; }
 	 bool can_promote_pawn();
@@ -34,8 +34,7 @@ private:
 	 void write_logs_from_games(char actual_y, char actual_x, char next_y, char next_x,char symbol,char color,char beating='x');
 	 bool read_logs_from_games();
 	 void begin_of_breadth_search();
-	 int breadth_search(char depth);
-	 int quiescenceSearch(char depth, int alpha, int beta);
+	 double breadth_search(char depth, Colour color);
 	 int value_of_table();
 public:
 	Board();

@@ -631,6 +631,9 @@ void Board::undo_move() {
 				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new King(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			break;
+		case ' ':
+			table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Piece(Colour::None, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+			break;
 		default:
 			break;
 		}
@@ -638,16 +641,16 @@ void Board::undo_move() {
 		table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])]->update_cords_piece(std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 		table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])]->decrease_move_count_for_undo_move();
 		// not important if move_count is equal or more than 1, just need to be mooved
-		table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])]->update_cords_piece(std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+		table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])]->update_cords_piece(std::get<2>(_logs[_logs.size() - 1]), std::get<3>(_logs[_logs.size() - 1]));
 		_logs.erase(_logs.end());
 
-
+		std::cout << "s";
 		}
 
 }
 void Board::menu_for_chess() {
 	std::cout << "Welcome to Chess program by Mateusz Stopa" << std::endl <<"-------------------------------------------------------------------"<< std::endl;
-	std::cout << "1.New game" << std::endl << "2.How to play" <<std::endl<< "3.Read _logs from games"<< std::endl << "Type X to exit" << std::endl;
+	std::cout << "1.New game" << std::endl << "2.How to play" <<std::endl<< "3.Read logs from games"<< std::endl << "Type X to exit" << std::endl;
 	char option;
 	std::cin >> option;
 	while (option != 'X') {
@@ -662,14 +665,14 @@ void Board::menu_for_chess() {
 			else if (option == '2') {
 				std::cout << "Type 1 for play as white, type 2 for play as black" << std::endl;
 				std::cin >> option;
-				if (option==1 || option ==2)player_vs_AI(option);
+				if (option == '1' || option == '2')player_vs_AI(option);
 			}
 			else { std::cout << "Wrong number, type again!"<<std::endl; }
 			break;
 		case '2' :
-			std::cout << std::endl << "1. First write letter of a cords then number" << std::endl <<
-				"2.Default white pieces start" << std::endl << "3. Names of figure with shortcut:" << std::endl <<
-				"P-Pawn" << std::endl << "R-Rook" << std::endl << "C-Knight" << std::endl << "B-Bishop" << "Q-Queen" << std::endl << "K-King" << std::endl <<
+			std::cout << std::endl << "1.First write letter of a cords then number" << std::endl <<
+				"2.Default white pieces start" << std::endl << "3.Names of figure with shortcut:" << std::endl <<
+				"P-Pawn" << std::endl << "R-Rook" << std::endl << "C-Knight" << std::endl << "B-Bishop" << std ::endl << "Q-Queen" << std::endl << "K-King" << std::endl <<
 				" Back to menu in 10 s" << std::endl;
 			Sleep(10000);
 			break;
@@ -681,7 +684,7 @@ void Board::menu_for_chess() {
 			break;
 
 		}
-		std::cout << "1.New game" << std::endl << "2.How to play" << std::endl << "3.Read _logs from games" << std::endl << "Type X to exit" << std::endl;
+		std::cout << "1.New game" << std::endl << "2.How to play" << std::endl << "3.Read logs from games" << std::endl << "Type X to exit" << std::endl;
 		std::cin >> option;
 	}
 
@@ -718,8 +721,9 @@ void Board::player_vs_AI(int type) {
 	bool win_check = false;
 	bool good_data = false;
 	_logs.clear();
-	if (type == 1) {
+	if (type == '1') {
 		while (win_check == false) {
+			_actual_turn = Turn::White;
 			print_board();
 			std::cout << "Your turn";
 			std::cout << std::endl;
@@ -736,6 +740,7 @@ void Board::player_vs_AI(int type) {
 				win_check = true;
 				continue;
 			}
+			_actual_turn = Turn::Black;
 			print_board();
 			std::cout << "Computer Turn" << std::endl;
 			begin_of_breadth_search();
@@ -747,6 +752,7 @@ void Board::player_vs_AI(int type) {
 	}
 	else {
 		while (win_check == false) {
+			_actual_turn = Turn::White;
 			std::cout << "Computer Turn" << std::endl;
 			print_board();
 			update_all_moves();
@@ -761,6 +767,7 @@ void Board::player_vs_AI(int type) {
 			print_board();
 			std::cout << "Your turn";
 			std::cout << std::endl;
+			_actual_turn = Turn::Black;
 			update_all_moves();
 			castling();
 			get_cords_to_move();
@@ -782,7 +789,7 @@ void Board::player_vs_AI(int type) {
 	_logs_from_games.push_back(_logs);
 
 }
-void Board::write_logs_from_games(char actual_y, char actual_x, char next_y, char next_x,char symbol,char color,char beating ='x') {
+void Board::write_logs_from_games(char actual_y, char actual_x, char next_y, char next_x,char symbol,char color,char beating ) {
 	_logs.push_back(std::make_tuple(actual_y, actual_x, next_y, next_x,symbol,color,beating));
 }
 bool Board::read_logs_from_games() {
@@ -839,7 +846,7 @@ bool Board::read_logs_from_games() {
 // There must be another base function for breadth_search to do best move for AI
 void Board::begin_of_breadth_search() {
 	std::tuple<char, char, char, char> move;
-	int value = 0, tmp_value = 0;
+	double value = 0, tmp_value = 0;
 	cords actual;
 	if (Turn::White==_actual_turn) {
 		for (auto& b : table_of_chessboard) {
@@ -851,7 +858,7 @@ void Board::begin_of_breadth_search() {
 					for (auto& values : x->_array_of_moves_with_value) {
 						change_next_move(std::get<0>(values), std::get<1>(values));
 						move_piece();
-						tmp_value = breadth_search(_depth_search - 1);
+						tmp_value = breadth_search(_depth_search - 1,Colour::White);
 						if (tmp_value < value) {
 							tmp_value = value;
 							move = std::make_tuple(actual.y, actual.x, std::get<0>(values), std::get<1>(values));
@@ -874,7 +881,7 @@ void Board::begin_of_breadth_search() {
 					for (auto& values : x->_array_of_moves_with_value) {
 						change_next_move(std::get<0>(values), std::get<1>(values));
 						move_piece();
-						tmp_value = breadth_search(_depth_search - 1);
+						tmp_value = breadth_search(_depth_search - 1,Colour::Black);
 						if (tmp_value > value) {
 							tmp_value = value;
 							move = std::make_tuple(actual.y, actual.x, std::get<0>(values), std::get<1>(values));
@@ -889,14 +896,14 @@ void Board::begin_of_breadth_search() {
 	change_actual_move(std::get<0>(move), std::get<1>(move));
 	change_next_move(std::get<2>(move), std::get<3>(move));
 }
-int Board::breadth_search(char depth) {
+double Board::breadth_search(char depth,Colour color) {
 	update_all_moves();
 	castling();
 	double value = 0;
 	double max = 0;
 	cords actual;
-	if (depth > 0) {
-		if (Turn::White == _actual_turn) {
+	if (depth >= 0) {
+		if (color == Colour::White) {
 			for (auto& b : table_of_chessboard) {
 				for (auto& x : b) {
 					if (x->_colour == Colour::White) {
@@ -906,7 +913,7 @@ int Board::breadth_search(char depth) {
 						for (auto& values : x->_array_of_moves_with_value) {
 							change_next_move(std::get<0>(values), std::get<1>(values));
 							move_piece();
-							value = std::get<2>(values)+ breadth_search(depth - 1);
+							value = std::get<2>(values)+ breadth_search(depth - 1,Colour::White);
 							if (value < max) {
 								max = value;
 							}
@@ -916,7 +923,7 @@ int Board::breadth_search(char depth) {
 				}
 			}
 		}
-		else {
+		else if(color == Colour::Black){
 			for (auto& b : table_of_chessboard) {
 				for (auto& x : b) {
 					if (x->_colour == Colour::Black) {
@@ -926,7 +933,7 @@ int Board::breadth_search(char depth) {
 						for (auto& values : x->_array_of_moves_with_value) {
 							change_next_move(std::get<0>(values), std::get<1>(values));
 							move_piece();
-							value = std::get<2>(values) + breadth_search(depth - 1);
+							value = std::get<2>(values) + breadth_search(depth - 1,Colour::Black);
 							if (value > max) {
 								max = value;
 							}
