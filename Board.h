@@ -1,10 +1,13 @@
 #pragma once
 #include "Piece.h"
 enum class Turn {White,Black};
+enum class WhoPlay{Player,Computer};
 class Board
 {
 private:
 	 typedef std::vector<std::tuple<char, char, char, char,char,char,char> > typ_logs;
+	 WhoPlay _actual_player;
+	 bool valid_promote_for_computer = false;
 	 Piece *table_of_chessboard[8][8];
 	 Turn _actual_turn;
 	 cords _actual, _next_move;
@@ -34,7 +37,7 @@ private:
 	 void write_logs_from_games(char actual_y, char actual_x, char next_y, char next_x,char symbol,char color,char beating='x');
 	 bool read_logs_from_games();
 	 void begin_of_breadth_search();
-	 double breadth_search(char depth, Colour color);
+	 double breadth_search(char depth);
 	 int value_of_table();
 public:
 	Board();
