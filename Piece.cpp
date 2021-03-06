@@ -17,6 +17,11 @@ value_of_moves_with_cords Piece::all_posible_moves_with_value(Piece* board[8][8]
 	return _array_of_moves_with_value;
 }
 
+char Piece::get_color_symbol() {
+    if (_colour == Colour::White) return'W';
+    else if (_colour == Colour::Black) return 'B';
+    else return 'N'; }
+
 // PAWN IMPLEMENTATION 
 Pawn::Pawn(Colour colour, char y, char x) :Piece(colour,y,x) {}
 int Pawn::get_value() {

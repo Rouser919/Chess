@@ -24,7 +24,7 @@ public:
 	virtual void decrease_move_count_for_undo_move() { move_count -= 2; }
 	virtual int get_move_count() { return move_count; }
 	void update_cords_piece(char y ,char x);
-	char get_color_symbol() { if (_colour == Colour::White) return'W'; else if (_colour == Colour::Black) return 'B'; return 'N'; }
+	char get_color_symbol();
 	virtual int get_value() { return Piece::_value; }
 	virtual double position_score(char y,char x) { return 0; }
 	virtual char getSymbol() { return Piece::_represent_figure; }
