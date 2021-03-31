@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/mateusz/CLionProjects/Chess-with-AI/Board.cpp
+Board.h
+/home/mateusz/CLionProjects/Chess-with-AI/Board.h
+iostream
+-
+cctype
+-
+string
+-
+colors.h
+/home/mateusz/CLionProjects/Chess-with-AI/colors.h
+
+/home/mateusz/CLionProjects/Chess-with-AI/Board.h
+Piece.h
+/home/mateusz/CLionProjects/Chess-with-AI/Piece.h
+memory
+-
+
+/home/mateusz/CLionProjects/Chess-with-AI/Chess.cpp
+Board.h
+/home/mateusz/CLionProjects/Chess-with-AI/Board.h
+iostream
+-
+
+/home/mateusz/CLionProjects/Chess-with-AI/Piece.h
+vector
+-
+tuple
+-
+memory
+-
+
+/home/mateusz/CLionProjects/Chess-with-AI/colors.h
+

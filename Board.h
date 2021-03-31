@@ -9,13 +9,13 @@ private:
 	 typedef std::vector<std::tuple<char, char, char, char,char,char,char> > typ_logs;
 	 WhoPlay _actual_player;
 	 bool valid_promote_for_computer = false;
-	 Piece *table_of_chessboard[8][8];
+	 std::array<std::unique_ptr<Piece>, 8> table_of_chessboard[8];
 	 Turn _actual_turn;
 	 cords _actual, _next_move;
 	 typ_logs _logs;
 	 typ_logs tmp;
 	 std::vector<typ_logs> _logs_from_games;
-	 const int _depth_search = 2;
+	 const int _depth_search = 1;
 	 void change_next_move(char y, char x) { _next_move.y = y, _next_move.x = x; }
 	 void change_actual_move(char y, char x) { _actual.y = y, _actual.x = x; }
 	 bool can_promote_pawn();
@@ -41,9 +41,8 @@ private:
 	 bool read_logs_from_games();
 	 void begin_of_breadth_search();
 	 double breadth_search(char depth);
-	 int value_of_table();
 public:
 	Board();
-	~Board();
+	~Board()=default;
 }; 
 

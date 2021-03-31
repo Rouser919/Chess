@@ -27,45 +27,36 @@ void Board::promote_pawn() {
 		switch (type) {
 		case 1:
 			if (_actual_turn == Turn::White) {
-				delete  table_of_chessboard[_next_move.y][_next_move.x];
-				table_of_chessboard[_next_move.y][_next_move.x] = new Queen(Colour::White, _next_move.y, _next_move.x);
+				table_of_chessboard[_next_move.y][_next_move.x] = std::make_unique<Queen>(Colour::White, _next_move.y, _next_move.x);
 			}
 			else {
-				delete  table_of_chessboard[_next_move.y][_next_move.x];
-				table_of_chessboard[_next_move.y][_next_move.x] = new Queen(Colour::Black, _next_move.y, _next_move.x);
+				table_of_chessboard[_next_move.y][_next_move.x] = std::make_unique<Queen>(Colour::Black, _next_move.y, _next_move.x);
 
 			}
 			break;
 		case 2:
 			if (_actual_turn == Turn::White) {
-				delete  table_of_chessboard[_next_move.y][_next_move.x];
-				table_of_chessboard[_next_move.y][_next_move.x] = new Rook(Colour::White, _next_move.y, _next_move.x);
+				table_of_chessboard[_next_move.y][_next_move.x] = std::make_unique<Rook>(Colour::White, _next_move.y, _next_move.x);
 			}
 			else {
-				delete  table_of_chessboard[_next_move.y][_next_move.x];
-				table_of_chessboard[_next_move.y][_next_move.x] = new Rook(Colour::Black, _next_move.y, _next_move.x);
-
+				table_of_chessboard[_next_move.y][_next_move.x] = std::make_unique<Rook>(Colour::Black, _next_move.y, _next_move.x);
 			}
 			break;
 		case 3:
 			if (_actual_turn == Turn::White) {
-				delete  table_of_chessboard[_next_move.y][_next_move.x];
-				table_of_chessboard[_next_move.y][_next_move.x] = new Bishop(Colour::White, _next_move.y, _next_move.x);
+				table_of_chessboard[_next_move.y][_next_move.x] = std::make_unique<Bishop>(Colour::White, _next_move.y, _next_move.x);
 			}
 			else {
-				delete  table_of_chessboard[_next_move.y][_next_move.x];
-				table_of_chessboard[_next_move.y][_next_move.x] = new Bishop(Colour::Black, _next_move.y, _next_move.x);
+				table_of_chessboard[_next_move.y][_next_move.x] = std::make_unique<Bishop>(Colour::Black, _next_move.y, _next_move.x);
 
 			}
 			break;
 		case 4:
 			if (_actual_turn == Turn::White) {
-				delete  table_of_chessboard[_next_move.y][_next_move.x];
-				table_of_chessboard[_next_move.y][_next_move.x] = new Knight(Colour::White, _next_move.y, _next_move.x);
+				table_of_chessboard[_next_move.y][_next_move.x] = std::make_unique<Knight>(Colour::White, _next_move.y, _next_move.x);
 			}
 			else {
-				delete  table_of_chessboard[_next_move.y][_next_move.x];
-				table_of_chessboard[_next_move.y][_next_move.x] = new Knight(Colour::Black, _next_move.y, _next_move.x);
+				table_of_chessboard[_next_move.y][_next_move.x] = std::make_unique<Knight>(Colour::Black, _next_move.y, _next_move.x);
 
 			}
 			break;
@@ -76,65 +67,54 @@ void Board::promote_pawn() {
 	}
 	else {
 		if (_actual_turn == Turn::White && valid_promote_for_computer == true) {
-			delete  table_of_chessboard[_next_move.y][_next_move.x];
-			table_of_chessboard[_next_move.y][_next_move.x] = new Queen(Colour::White, _next_move.y, _next_move.x);
+			table_of_chessboard[_next_move.y][_next_move.x] = std::make_unique<Queen>(Colour::White, _next_move.y, _next_move.x);
 
 		}
 		else {
-			delete  table_of_chessboard[_next_move.y][_next_move.x];
-			table_of_chessboard[_next_move.y][_next_move.x] = new Queen(Colour::Black, _next_move.y, _next_move.x);
+			table_of_chessboard[_next_move.y][_next_move.x] = std::make_unique<Queen>(Colour::Black, _next_move.y, _next_move.x);
 
 		}
 
 	}
 }
 void Board::init_new_table() {
-	table_of_chessboard[0][0] = new Rook(Colour::White, 0, 0);
-	table_of_chessboard[0][1] = new Knight(Colour::White, 0, 1);
-	table_of_chessboard[0][2] = new Bishop(Colour::White, 0, 2);
-	table_of_chessboard[0][3] = new Queen(Colour::White, 0, 3);
-	table_of_chessboard[0][4] = new King(Colour::White, 0, 4);
-	table_of_chessboard[0][5] = new Bishop(Colour::White, 0, 5);
-	table_of_chessboard[0][6] = new Knight(Colour::White, 0,6);
-	table_of_chessboard[0][7] = new Rook(Colour::White, 0, 7);
-	table_of_chessboard[1][0] = new Pawn(Colour::White, 1, 0);
-	table_of_chessboard[1][1] = new Pawn(Colour::White, 1, 1);
-	table_of_chessboard[1][2] = new Pawn(Colour::White, 1, 2);
-	table_of_chessboard[1][3] = new Pawn(Colour::White, 1, 3);
-	table_of_chessboard[1][4] = new Pawn(Colour::White, 1, 4);
-	table_of_chessboard[1][5] = new Pawn(Colour::White, 1, 5);
-	table_of_chessboard[1][6] = new Pawn(Colour::White, 1, 6);
-	table_of_chessboard[1][7] = new Pawn(Colour::White, 1, 7);
-	table_of_chessboard[1][0] = new Pawn(Colour::White, 1, 0);
-	table_of_chessboard[1][1] = new Pawn(Colour::White, 1, 1);
-	table_of_chessboard[1][2] = new Pawn(Colour::White, 1, 2);
-	table_of_chessboard[1][3] = new Pawn(Colour::White, 1, 3);
-	table_of_chessboard[1][4] = new Pawn(Colour::White, 1, 4);
-	table_of_chessboard[1][5] = new Pawn(Colour::White, 1, 5);
-	table_of_chessboard[1][6] = new Pawn(Colour::White, 1, 6);
-	table_of_chessboard[1][7] = new Pawn(Colour::White, 1, 7);
-	table_of_chessboard[4][4] = new King(Colour::White, 4, 4);
+	table_of_chessboard[0][0] = std::make_unique<Rook>(Colour::White, 0, 0);
+	table_of_chessboard[0][1] = std::make_unique<Knight>(Colour::White, 0, 1);
+	table_of_chessboard[0][2] = std::make_unique<Bishop>(Colour::White, 0, 2);
+	table_of_chessboard[0][3] = std::make_unique<Queen>(Colour::White, 0, 3);
+	table_of_chessboard[0][4] = std::make_unique<King>(Colour::White, 0, 4);
+	table_of_chessboard[0][5] = std::make_unique<Bishop>(Colour::White, 0, 5);
+	table_of_chessboard[0][6] = std::make_unique<Knight>(Colour::White, 0,6);
+	table_of_chessboard[0][7] = std::make_unique<Rook>(Colour::White, 0, 7);
+	table_of_chessboard[1][0] = std::make_unique<Pawn>(Colour::White, 1, 0);
+	table_of_chessboard[1][1] = std::make_unique<Pawn>(Colour::White, 1, 1);
+	table_of_chessboard[1][2] = std::make_unique<Pawn>(Colour::White, 1, 2);
+	table_of_chessboard[1][3] = std::make_unique<Pawn>(Colour::White, 1, 3);
+	table_of_chessboard[1][4] = std::make_unique<Pawn>(Colour::White, 1, 4);
+	table_of_chessboard[1][5] = std::make_unique<Pawn>(Colour::White, 1, 5);
+	table_of_chessboard[1][6] = std::make_unique<Pawn>(Colour::White, 1, 6);
+	table_of_chessboard[1][7] = std::make_unique<Pawn>(Colour::White, 1, 7);
 	for (int y = 2; y < 6; y++) {
 		for (int x = 0; x < 8; x++) {
-			table_of_chessboard[y][x] = new Piece(Colour::None, static_cast<char> (y),static_cast<char> (x));
+			table_of_chessboard[y][x] = std::make_unique<Piece>(Colour::None, static_cast<char> (y),static_cast<char> (x));
 		}
 	}
-	table_of_chessboard[7][0] = new Rook(Colour::Black, 7, 0);
-	table_of_chessboard[7][1] = new Knight(Colour::Black, 7, 1);
-	table_of_chessboard[7][2] = new Bishop(Colour::Black, 7, 2);
-	table_of_chessboard[7][3] = new Queen(Colour::Black, 7, 3);
-	table_of_chessboard[7][4] = new King(Colour::Black, 7, 4);
-	table_of_chessboard[7][5] = new Bishop(Colour::Black, 7, 5);
-	table_of_chessboard[7][6] = new Knight(Colour::Black, 7, 6);
-	table_of_chessboard[7][7] = new Rook(Colour::Black, 7, 7);
-	table_of_chessboard[6][0] = new Pawn(Colour::Black, 6, 0);
-	table_of_chessboard[6][1] = new Pawn(Colour::Black, 6, 1);
-	table_of_chessboard[6][2] = new Pawn(Colour::Black, 6, 2);
-	table_of_chessboard[6][3] = new Pawn(Colour::Black, 6, 3);
-	table_of_chessboard[6][4] = new Pawn(Colour::Black, 6, 4);
-	table_of_chessboard[6][5] = new Pawn(Colour::Black, 6, 5);
-	table_of_chessboard[6][6] = new Pawn(Colour::Black, 6, 6);
-	table_of_chessboard[6][7] = new Pawn(Colour::Black, 6, 7);
+	table_of_chessboard[7][0] = std::make_unique<Rook>(Colour::Black, 7, 0);
+	table_of_chessboard[7][1] = std::make_unique<Knight> (Colour::Black, 7, 1);
+	table_of_chessboard[7][2] = std::make_unique<Bishop>(Colour::Black, 7, 2);
+	table_of_chessboard[7][3] = std::make_unique<Queen>(Colour::Black, 7, 3);
+	table_of_chessboard[7][4] = std::make_unique<King>(Colour::Black, 7, 4);
+	table_of_chessboard[7][5] = std::make_unique<Bishop>(Colour::Black, 7, 5);
+	table_of_chessboard[7][6] = std::make_unique<Knight>(Colour::Black, 7, 6);
+	table_of_chessboard[7][7] = std::make_unique<Rook>(Colour::Black, 7, 7);
+	table_of_chessboard[6][0] = std::make_unique<Pawn>(Colour::Black, 6, 0);
+	table_of_chessboard[6][1] = std::make_unique<Pawn>(Colour::Black, 6, 1);
+	table_of_chessboard[6][2] = std::make_unique<Pawn>(Colour::Black, 6, 2);
+	table_of_chessboard[6][3] = std::make_unique<Pawn>(Colour::Black, 6, 3);
+	table_of_chessboard[6][4] = std::make_unique<Pawn>(Colour::Black, 6, 4);
+	table_of_chessboard[6][5] = std::make_unique<Pawn>(Colour::Black, 6, 5);
+	table_of_chessboard[6][6] = std::make_unique<Pawn>(Colour::Black, 6, 6);
+	table_of_chessboard[6][7] = std::make_unique<Pawn>(Colour::Black, 6, 7);
 	
 }
 bool Board::valid_cords_actual(char y, char x) {
@@ -380,12 +360,7 @@ void Board::print_board() {
     std::cout << SetForeBLU<<"---------------------------"<<RESETTEXT<<std::endl;
 }
 void Board::reset_board() {
-	for (int y = 0; y < 8; y++) {
-		for (int x = 0; x < 8; x++) {
-			delete table_of_chessboard[y][x];
-		}
-	}
-	init_new_table();
+    init_new_table();
 	_actual_turn = Turn::White;
 }
 void Board::get_cords_to_move() {
@@ -438,10 +413,8 @@ bool Board::move_piece() {
 				write_logs_from_games(_actual.y, _actual.x, _next_move.y, _next_move.x, table_of_chessboard[_actual.y][_actual.x]->getSymbol(), table_of_chessboard[_actual.y][_actual.x]->get_color_symbol(), 'L');
 				std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y][_next_move.x]);
 				table_of_chessboard[_next_move.y][_next_move.x]->update_cords_piece(_next_move.y, _next_move.x);
-				delete table_of_chessboard[_actual.y][_actual.x];
-				table_of_chessboard[_actual.y][_actual.x] = new Piece(Colour::None, _actual.y, _actual.x);
-				delete table_of_chessboard[_next_move.y -1][_next_move.x];
-				table_of_chessboard[_next_move.y - 1][_next_move.x] = new Piece(Colour::None, _next_move.y - 1,_next_move.x);
+				table_of_chessboard[_actual.y][_actual.x] = std::make_unique<Piece>(Colour::None, _actual.y, _actual.x);
+				table_of_chessboard[_next_move.y - 1][_next_move.x] = std::make_unique<Piece>(Colour::None, _next_move.y - 1,_next_move.x);
 
 			}
 			else if (table_of_chessboard[_next_move.y + 1][_next_move.x]->getPieceType() == PieceType::Pawn &&
@@ -449,10 +422,8 @@ bool Board::move_piece() {
 				write_logs_from_games(_actual.y, _actual.x, _next_move.y, _next_move.x, table_of_chessboard[_actual.y][_actual.x]->getSymbol(), table_of_chessboard[_actual.y][_actual.x]->get_color_symbol(), 'L');
 				std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y ][_next_move.x]);
 				table_of_chessboard[_next_move.y][_next_move.x]->update_cords_piece(_next_move.y, _next_move.x);
-				delete table_of_chessboard[_actual.y][_actual.x];
-				table_of_chessboard[_actual.y][_actual.x] = new Piece(Colour::None, _actual.y, _actual.x);
-				delete table_of_chessboard[_next_move.y + 1][_next_move.x];
-				table_of_chessboard[_next_move.y + 1][_next_move.x] = new Piece(Colour::None, _next_move.y +1, _next_move.x);
+				table_of_chessboard[_actual.y][_actual.x] = std::make_unique<Piece>(Colour::None, _actual.y, _actual.x);
+				table_of_chessboard[_next_move.y + 1][_next_move.x] = std::make_unique<Piece>(Colour::None, _next_move.y +1, _next_move.x);
 
 			}
 		}
@@ -464,14 +435,12 @@ bool Board::move_piece() {
 				write_logs_from_games(_actual.y, _actual.x, _next_move.y, _next_move.x, table_of_chessboard[_actual.y][_actual.x]->getSymbol(), table_of_chessboard[_actual.y][_actual.x]->get_color_symbol(),'S');
 				std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y][_next_move.x]);
 				table_of_chessboard[_next_move.y][_next_move.x]->update_cords_piece(_next_move.y, _next_move.x);
-				delete table_of_chessboard[_actual.y][_actual.x];
-				table_of_chessboard[_actual.y][_actual.x] = new Piece(Colour::None, _actual.y, _actual.x);
+				table_of_chessboard[_actual.y][_actual.x] = std::make_unique<Piece>(Colour::None, _actual.y, _actual.x);
 				// Rook swap
 				write_logs_from_games(_actual.y, 7, _next_move.y, 5, table_of_chessboard[_actual.y][7]->getSymbol(), table_of_chessboard[_actual.y][7]->get_color_symbol(),'S');
 				std::swap(table_of_chessboard[_actual.y][7], table_of_chessboard[_next_move.y][5]);
 				table_of_chessboard[_next_move.y][5]->update_cords_piece(_next_move.y, 5);
-				delete table_of_chessboard[_actual.y][7];
-				table_of_chessboard[_actual.y][7] = new Piece(Colour::None, _actual.y, 7);
+				table_of_chessboard[_actual.y][7] = std::make_unique<Piece>(Colour::None, _actual.y, 7);
 			}
 			// long castle
 			else if (_next_move.x == 2) {
@@ -479,14 +448,12 @@ bool Board::move_piece() {
 				write_logs_from_games(_actual.y, _actual.x, _next_move.y, _next_move.x, table_of_chessboard[_actual.y][_actual.x]->getSymbol(), table_of_chessboard[_actual.y][_actual.x]->get_color_symbol(),'S');
 				std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y][_next_move.x]);
 				table_of_chessboard[_next_move.y][_next_move.x]->update_cords_piece(_next_move.y, _next_move.x);
-				delete table_of_chessboard[_actual.y][_actual.x];
-				table_of_chessboard[_actual.y][_actual.x] = new Piece(Colour::None, _actual.y, _actual.x);
+				table_of_chessboard[_actual.y][_actual.x] = std::make_unique<Piece>(Colour::None, _actual.y, _actual.x);
 				// Rook swap
 				write_logs_from_games(_actual.y, 0, _next_move.y, 3, table_of_chessboard[_actual.y][0]->getSymbol(), table_of_chessboard[_actual.y][0]->get_color_symbol(),'S');
 				std::swap(table_of_chessboard[_actual.y][0], table_of_chessboard[_next_move.y][3]);
 				table_of_chessboard[_next_move.y][3]->update_cords_piece(_next_move.y, 3);
-				delete table_of_chessboard[_actual.y][0];
-				table_of_chessboard[_actual.y][0] = new Piece(Colour::None, _actual.y, 0);
+				table_of_chessboard[_actual.y][0] = std::make_unique<Piece>(Colour::None, _actual.y, 0);
 
 			}
 
@@ -497,8 +464,7 @@ bool Board::move_piece() {
 			write_logs_from_games(_actual.y, _actual.x, _next_move.y, _next_move.x, table_of_chessboard[_actual.y][_actual.x]->getSymbol(), table_of_chessboard[_next_move.y][_next_move.x]->get_color_symbol(), table_of_chessboard[_next_move.y][_next_move.x]->getSymbol());
 			std::swap(table_of_chessboard[_actual.y][_actual.x], table_of_chessboard[_next_move.y][_next_move.x]);
 			table_of_chessboard[_next_move.y][_next_move.x]->update_cords_piece(_next_move.y, _next_move.x);
-			delete table_of_chessboard[_actual.y][_actual.x];
-			table_of_chessboard[_actual.y][_actual.x] = new Piece(Colour::None, _actual.y, _actual.x);
+			table_of_chessboard[_actual.y][_actual.x] = std::make_unique<Piece>(Colour::None, _actual.y, _actual.x);
 		}
 		if (can_promote_pawn()) promote_pawn();
 		return true;
@@ -524,14 +490,12 @@ void Board::undo_move() {
 					std::swap(table_of_chessboard[std::get<0>(_logs[king])][4], table_of_chessboard[std::get<2>(_logs[king])][2]);
 					table_of_chessboard[std::get<2>(_logs[king])][4]->update_cords_piece(std::get<2>(_logs[king]),4);
 					table_of_chessboard[std::get<2>(_logs[king])][4]->decrease_move_count_for_undo_move();
-					delete table_of_chessboard[std::get<2>(_logs[king])][2];
-					table_of_chessboard[std::get<2>(_logs[king])][2] = new Piece(Colour::None, std::get<2>(_logs[king]), 2);
+					table_of_chessboard[std::get<2>(_logs[king])][2] = std::make_unique<Piece>(Colour::None, std::get<2>(_logs[king]), 2);
 					// Rook swap
 					std::swap(table_of_chessboard[std::get<2>(_logs[rook])][3], table_of_chessboard[std::get<2>(_logs[rook])][0]);
 					table_of_chessboard[std::get<2>(_logs[rook])][0]->update_cords_piece(std::get<2>(_logs[rook]), 0);
 					table_of_chessboard[std::get<2>(_logs[rook])][0]->decrease_move_count_for_undo_move();
-					delete table_of_chessboard[std::get<2>(_logs[rook])][3];
-					table_of_chessboard[std::get<2>(_logs[rook])][3] = new Piece(Colour::None, std::get<2>(_logs[rook]), 3);
+					table_of_chessboard[std::get<2>(_logs[rook])][3] = std::make_unique<Piece>(Colour::None, std::get<2>(_logs[rook]), 3);
 					_logs.erase(_logs.begin()+king, _logs.end());
 
 				}
@@ -540,16 +504,13 @@ void Board::undo_move() {
 					std::swap(table_of_chessboard[std::get<0>(_logs[king])][4], table_of_chessboard[std::get<2>(_logs[king])][6]);
 					table_of_chessboard[std::get<2>(_logs[king])][4]->update_cords_piece(std::get<2>(_logs[king]), 4);
 					table_of_chessboard[std::get<2>(_logs[king])][4]->decrease_move_count_for_undo_move();
-					delete table_of_chessboard[std::get<2>(_logs[king])][6];
-					table_of_chessboard[std::get<2>(_logs[king])][6] = new Piece(Colour::None, std::get<2>(_logs[king]), 6);
+					table_of_chessboard[std::get<2>(_logs[king])][6] = std::make_unique<Piece>(Colour::None, std::get<2>(_logs[king]), 6);
 					// Rook swap
 					std::swap(table_of_chessboard[std::get<2>(_logs[rook])][5], table_of_chessboard[std::get<2>(_logs[rook])][7]);
 					table_of_chessboard[std::get<2>(_logs[rook])][7]->update_cords_piece(std::get<2>(_logs[rook]), 0);
 					table_of_chessboard[std::get<2>(_logs[rook])][7]->decrease_move_count_for_undo_move();
-					delete table_of_chessboard[std::get<2>(_logs[rook])][5];
-					table_of_chessboard[std::get<2>(_logs[rook])][5] = new Piece(Colour::None, std::get<2>(_logs[rook]), 5);
+					table_of_chessboard[std::get<2>(_logs[rook])][5] = std::make_unique<Piece>(Colour::None, std::get<2>(_logs[rook]), 5);
 					_logs.erase(_logs.begin() + king, _logs.end());
-					char x=10;
 
 				}
 
@@ -565,10 +526,8 @@ void Board::undo_move() {
 			std::swap(table_of_chessboard[std::get<0>(_logs[_logs.size()-1])][std::get<1>(_logs[_logs.size() - 1])], table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])]);
 			table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])]->update_cords_piece(std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])]->decrease_move_count_for_undo_move();
-			delete table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])];
-			table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])] = new Piece(Colour::None, std::get<2>(_logs[_logs.size() - 1]),std::get<3>(_logs[_logs.size() - 1]));
-			delete  table_of_chessboard[std::get<2>(_logs[_logs.size() - 1]) - 1][std::get<3>(_logs[_logs.size() - 1])];
-			table_of_chessboard[std::get<2>(_logs[_logs.size() - 1]) - 1][std::get<3>(_logs[_logs.size() - 1])] = new  Pawn(Colour::Black, std::get<2>(_logs[_logs.size() - 1]) - 1, std::get<3>(_logs[_logs.size() - 1]) );
+			table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])] = std::make_unique<Piece>(Colour::None, std::get<2>(_logs[_logs.size() - 1]),std::get<3>(_logs[_logs.size() - 1]));
+			table_of_chessboard[std::get<2>(_logs[_logs.size() - 1]) - 1][std::get<3>(_logs[_logs.size() - 1])] =std::make_unique<Pawn>(Colour::Black, std::get<2>(_logs[_logs.size() - 1]) - 1, std::get<3>(_logs[_logs.size() - 1]) );
 			// not important if move_count is equal or more than 1, just need to be mooved
 			table_of_chessboard[std::get<2>(_logs[_logs.size() - 1]) - 1][std::get<3>(_logs[_logs.size() - 1])]->update_cords_piece(std::get<2>(_logs[_logs.size() - 1]) - 1, std::get<3>(_logs[_logs.size() - 1]) );
 			_logs.erase(_logs.end()-1);
@@ -578,10 +537,8 @@ void Board::undo_move() {
 			std::swap(table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])], table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])]);
 			table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])]->update_cords_piece(std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])]->decrease_move_count_for_undo_move();
-			delete table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])];
-			table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])] = new Piece(Colour::None, std::get<2>(_logs[_logs.size() - 1]), std::get<3>(_logs[_logs.size() - 1]));
-			delete  table_of_chessboard[std::get<2>(_logs[_logs.size() - 1]) + 1][std::get<3>(_logs[_logs.size() - 1])];
-			table_of_chessboard[std::get<2>(_logs[_logs.size() - 1]) + 1][std::get<3>(_logs[_logs.size() - 1])] = new  Pawn(Colour::White, std::get<2>(_logs[_logs.size() - 1]) + 1, std::get<3>(_logs[_logs.size() - 1]));
+			table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])] = std::make_unique<Piece>(Colour::None, std::get<2>(_logs[_logs.size() - 1]), std::get<3>(_logs[_logs.size() - 1]));
+			table_of_chessboard[std::get<2>(_logs[_logs.size() - 1]) + 1][std::get<3>(_logs[_logs.size() - 1])] = std::make_unique<Pawn>(Colour::White, std::get<2>(_logs[_logs.size() - 1]) + 1, std::get<3>(_logs[_logs.size() - 1]));
 			// not important if move_count is equal or more than 1, just need to be mooved
 			table_of_chessboard[std::get<2>(_logs[_logs.size() - 1]) + 1][std::get<3>(_logs[_logs.size() - 1])]->update_cords_piece(std::get<2>(_logs[_logs.size() - 1]) + 1, std::get<3>(_logs[_logs.size() - 1]));
 			_logs.erase(_logs.end()-1);
@@ -590,58 +547,57 @@ void Board::undo_move() {
 		}
 	else {
 		// bug in one function
-		delete table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])];
 		switch (std::get<6>(_logs[_logs.size() - 1])) {
 		case 'P':
 			if (std::get<5>(_logs[_logs.size() - 1]) == 'B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Pawn(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<Pawn>(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Pawn(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<Pawn>(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			break;
 		case 'R':
 			if (std::get<5>(_logs[_logs.size() - 1]) == 'B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Rook(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<Rook>(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Rook(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<Rook>(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			break;
 		case 'C':
 			if (std::get<5>(_logs[_logs.size() - 1]) == 'B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Knight(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<Knight> (Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Knight(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<Knight>(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			break;
 		case 'B':
 			if (std::get<5>(_logs[_logs.size() - 1]) == 'B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Bishop(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<Bishop>(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Bishop(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<Bishop>(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			break;
 		case'Q':
 			if (std::get<5>(_logs[_logs.size() - 1]) == 'B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Queen(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<Queen>(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Queen(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<Queen>(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			break;
 		case 'K':
 			if (std::get<5>(_logs[_logs.size() - 1]) == 'B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new King(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<King>(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new King(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<King>(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			}
 			break;
 		case ' ':
-			table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Piece(Colour::None, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
+			table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = std::make_unique<Piece>(Colour::None, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
 			break;
 		default:
 		    std::cout<<"Something wrong"<<std::endl;
@@ -909,7 +865,6 @@ void Board::begin_of_breadth_search() {
 						}
                         update_all_moves();
                         castling();
-                        print_board();
 
 					}
 				}
@@ -1023,77 +978,3 @@ Board::Board() {
 	menu_for_chess();
 
 }
-Board::~Board() {
-	for (auto& i : table_of_chessboard) {
-		for (auto& b : i) {
-		    delete b;
-		}
-	}
-}
-
-/*		delete table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])];
-		switch (std::get<6>(_logs[_logs.size() - 1])) {
-		case 'P':
-			if (std::get<5>(_logs[_logs.size() - 1])=='B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Pawn(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Pawn(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			break;
-		case 'R':
-			if (std::get<5>(_logs[_logs.size() - 1]) == 'B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Rook(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Rook(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			break;
-		case 'C':
-			if (std::get<5>(_logs[_logs.size() - 1]) == 'B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Knight(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Knight(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			break;
-		case 'B':
-			if (std::get<5>(_logs[_logs.size() - 1]) == 'B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Bishop(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Bishop(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			break;
-		case'Q':
-			if (std::get<5>(_logs[_logs.size() - 1]) == 'B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Queen(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Queen(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			break;
-		case 'K':
-			if (std::get<5>(_logs[_logs.size() - 1]) == 'B') {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new King(Colour::Black, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			else {
-				table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new King(Colour::White, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			}
-			break;
-		case ' ':
-			table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])] = new Piece(Colour::None, std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-			break;
-		default:
-			break;
-		}
-		std::swap(table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])], table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])]);
-		table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])]->update_cords_piece(std::get<0>(_logs[_logs.size() - 1]), std::get<1>(_logs[_logs.size() - 1]));
-		table_of_chessboard[std::get<0>(_logs[_logs.size() - 1])][std::get<1>(_logs[_logs.size() - 1])]->decrease_move_count_for_undo_move();
-		// not important if move_count is equal or more than 1, just need to be mooved
-		table_of_chessboard[std::get<2>(_logs[_logs.size() - 1])][std::get<3>(_logs[_logs.size() - 1])]->update_cords_piece(std::get<2>(_logs[_logs.size() - 1]), std::get<3>(_logs[_logs.size() - 1]));
-		_logs.erase(_logs.end()-1);*/
-
-
-
-

@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <tuple>
+#include <memory>
+
 enum class Colour {None, White, Black };
 enum class PieceType {None ,Pawn, Rook, Bishop, Knight, Queen, King };
 typedef std::vector<std::tuple<char, char, double>> value_of_moves_with_cords;
@@ -29,7 +31,7 @@ public:
 	virtual double position_score(char y,char x) { return 0; }
 	virtual char getSymbol() { return Piece::_represent_figure; }
 	virtual PieceType getPieceType() { return Piece::_piecetype; }
-	virtual value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]);
+	virtual value_of_moves_with_cords all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board);
 };
 class Pawn:public Piece 
 {
@@ -55,7 +57,7 @@ public:
 	char getSymbol()override { return Pawn::_represent_figure; }
 	int get_value()override;
 	double position_score(char y,char x) override;
-	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override ;
+	value_of_moves_with_cords all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) override ;
 	PieceType getPieceType() override { return Pawn::_piecetype; }
 };
 class Rook :public Piece 
@@ -82,7 +84,7 @@ public:
 	char getSymbol()override { return Rook::_represent_figure; }
 	int get_value()override;
 	double position_score(char y, char x) override;
-	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override;
+	value_of_moves_with_cords all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) override;
 	PieceType getPieceType() override { return Rook::_piecetype; }
 };
 class Bishop :public Piece
@@ -109,7 +111,7 @@ public:
 	char getSymbol()override { return Bishop::_represent_figure; }
 	int get_value()override;
 	double position_score(char y, char x) override;
-	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override;
+	value_of_moves_with_cords all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) override;
 	PieceType getPieceType() override { return Bishop::_piecetype; }
 };
 class Knight :public Piece
@@ -136,7 +138,7 @@ public:
 	char getSymbol()override { return Knight::_represent_figure; }
 	int get_value()override;
 	double position_score(char y, char x) override;
-	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override;
+	value_of_moves_with_cords all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) override;
 	PieceType getPieceType() override { return Knight::_piecetype; }
 };
 class Queen :public Piece
@@ -163,7 +165,7 @@ public:
 	char getSymbol()override { return Queen::_represent_figure; }
 	int get_value()override;
 	double position_score(char y, char x) override;
-	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override;
+	value_of_moves_with_cords all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) override;
 	PieceType getPieceType() override { return Queen::_piecetype; }
 };
 class King :public Piece
@@ -182,7 +184,7 @@ class King :public Piece
 	{2, 2, 0, 0, 0, 0, 2, 2},
 	{ 2, 3, 1, 0, 0, 1, 3, 2}
 	};
-	bool is_there_a_enemy_king(Piece* board[8][8],char y,char x);
+	bool is_there_a_enemy_king(std::array<std::unique_ptr<Piece>, 8> *board,char y,char x);
 public:
 	King(Colour colour, char y,char x);
 	void increase_move_count() override { move_count++; }
@@ -191,6 +193,6 @@ public:
 	char getSymbol()override { return King::_represent_figure; }
 	int get_value()override;
 	double position_score(char y, char x) override;
-	value_of_moves_with_cords all_posible_moves_with_value(Piece* board[8][8]) override;
+	value_of_moves_with_cords all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) override;
 	PieceType getPieceType() override { return King::_piecetype; }
 };

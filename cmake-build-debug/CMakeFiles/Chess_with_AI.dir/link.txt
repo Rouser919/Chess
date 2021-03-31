@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/Chess_with_AI.dir/Board.cpp.o CMakeFiles/Chess_with_AI.dir/Chess.cpp.o CMakeFiles/Chess_with_AI.dir/Piece.cpp.o  -o Chess_with_AI 

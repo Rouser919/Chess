@@ -12,7 +12,7 @@ void Piece::update_cords_piece(char y, char x) {
 	_actual.y = y;
 	increase_move_count();
 }
-value_of_moves_with_cords Piece::all_posible_moves_with_value(Piece* board[8][8]) {
+value_of_moves_with_cords Piece::all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) {
 	_array_of_moves_with_value.clear();
 	return _array_of_moves_with_value;
 }
@@ -40,7 +40,7 @@ double Pawn::position_score(char y, char x) {
 		return -Pawn::_scoreBoard[y][x];
 	}
 }
-value_of_moves_with_cords Pawn::all_posible_moves_with_value(Piece* board[8][8]){ 
+value_of_moves_with_cords Pawn::all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board){
 	_array_of_moves_with_value.clear();
 	if (_colour == Colour::White) {
 		if (_actual.y + 1 != 8) {
@@ -123,7 +123,7 @@ double Rook::position_score(char y, char x) {
 		return -Rook::_scoreBoard[y][x];
 	}
 }
-value_of_moves_with_cords Rook::all_posible_moves_with_value(Piece* board[8][8]) {
+value_of_moves_with_cords Rook::all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) {
 	_array_of_moves_with_value.clear();
 	int i;
 		// search for moves of left side x
@@ -176,7 +176,7 @@ double Bishop::position_score(char y, char x) {
 		return -Bishop::_scoreBoard[y][x];
 	}
 }
-value_of_moves_with_cords Bishop::all_posible_moves_with_value(Piece* board[8][8]) {
+value_of_moves_with_cords Bishop::all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) {
 	_array_of_moves_with_value.clear();
 	int i;
 	// search for moves above piece in right diagonal
@@ -230,7 +230,7 @@ double Knight::position_score(char y, char x) {
 		return Knight::_scoreBoard[y][x];
 	}
 }
-value_of_moves_with_cords Knight::all_posible_moves_with_value(Piece* board[8][8]) {
+value_of_moves_with_cords Knight::all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) {
 	_array_of_moves_with_value.clear();
 	if (_actual.y + 2 < 8 && _actual.x + 1 < 8 && board[_actual.y + 2][_actual.x + 1]->_colour != _colour) {
 		_array_of_moves_with_value.push_back(std::make_tuple(_actual.y + 2, _actual.x + 1, position_score(_actual.y + 2, _actual.x + 1) + board[_actual.y + 2][_actual.x + 1]->get_value()));
@@ -278,7 +278,7 @@ double Queen::position_score(char y, char x) {
 		return Queen::_scoreBoard[y][x];
 	}
 }
-value_of_moves_with_cords Queen::all_posible_moves_with_value(Piece* board[8][8]) {
+value_of_moves_with_cords Queen::all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) {
 	_array_of_moves_with_value.clear();
 	int i;
 	// search for moves of left side x
@@ -348,7 +348,7 @@ value_of_moves_with_cords Queen::all_posible_moves_with_value(Piece* board[8][8]
 // KING IMPLEMENTATION
 
 King::King( Colour colour,char y, char x):Piece(colour,y,x){}
-bool King::is_there_a_enemy_king(Piece* board[8][8],char y,char x) {
+bool King::is_there_a_enemy_king(std::array<std::unique_ptr<Piece>, 8> *board,char y,char x) {
 	if (y - 1 >= 0 && board[y - 1][x]->getPieceType() == PieceType::King && _colour != board[y - 1][x]->_colour) return 1;
 	if (y - 1 >= 0 && x-1 >=0 && board[y - 1][x-1]->getPieceType() == PieceType::King && _colour != board[y - 1][x-1]->_colour) return 1;
 	if (x- 1 >= 0 && board[y][x-1]->getPieceType() == PieceType::King && _colour != board[y][x-1]->_colour) return 1;
@@ -376,7 +376,7 @@ double King::position_score(char y, char x) {
 		return King::_scoreBoard[y][x];
 	}
 }
-value_of_moves_with_cords King::all_posible_moves_with_value(Piece* board[8][8]) {
+value_of_moves_with_cords King::all_posible_moves_with_value(std::array<std::unique_ptr<Piece>, 8> *board) {
 	_array_of_moves_with_value.clear();
 	if (_actual.y - 1 >= 0 && _colour != board[_actual.y-1][_actual.x]->_colour) {
 		if (!is_there_a_enemy_king(board, _actual.y - 1, _actual.x)) {
